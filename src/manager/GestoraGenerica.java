@@ -1,4 +1,4 @@
 package manager;
 
-public class GestoraGenerica {
+public abstract class GestoraGenerica<T> {
 }

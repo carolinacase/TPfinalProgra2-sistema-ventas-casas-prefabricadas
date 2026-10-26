@@ -1,4 +1,6 @@
 package manager;
 
-public class GestoraVentas {
+import models.Venta;
+
+public class GestoraVentas extends GestoraGenerica<Venta>{
 }

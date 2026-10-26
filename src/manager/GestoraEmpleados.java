@@ -1,4 +1,6 @@
 package manager;
 
-public class GestoraEmpleados {
+import models.Empleado;
+
+public class GestoraEmpleados extends GestoraGenerica<Empleado>{
 }
