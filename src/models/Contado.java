@@ -1,4 +1,4 @@
 package models;
 
-public class Contado {
+public class Contado extends Venta{
 }

@@ -1,4 +1,6 @@
 package models;
 
-public class Venta {
+import Interface.IPagable;
+
+public abstract class Venta implements IPagable {
 }

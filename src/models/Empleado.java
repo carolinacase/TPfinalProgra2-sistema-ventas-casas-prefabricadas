@@ -1,4 +1,4 @@
 package models;
 
-public class Empleado {
+public abstract class Empleado extends Persona{
 }
