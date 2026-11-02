@@ -68,6 +68,4 @@ public abstract class Persona {
     public int hashCode() {
         return Objects.hashCode(dni);
     }
-
-    public abstract String getNombreCompleto();
 }

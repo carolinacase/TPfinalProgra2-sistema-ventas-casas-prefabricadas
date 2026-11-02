@@ -16,6 +16,4 @@ public class Financiado extends Venta{
         this.cantidadCuotas = cantidadCuotas;
         this.credito = credito;
     }
-
-    public
 }
