@@ -10,10 +10,38 @@ public class Financiado extends Venta{
    private int cantidadCuotas;
    private Credito credito;
 
-    public Financiado(double anticipo, LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
+    public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion,
+                      double anticipo, LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
+        super(idVenta, fechaSenia, montoSenia, cliente, vendedor, cotizacion);
         this.anticipo = anticipo;
         this.fechaVtoAnticipo = fechaVtoAnticipo;
         this.cantidadCuotas = cantidadCuotas;
         this.credito = credito;
+    }
+
+    public double getAnticipo() {
+        return anticipo;
+    }
+
+    public void setAnticipo(double anticipo) {
+        this.anticipo = anticipo;
+    }
+
+    public LocalDate getFechaVtoAnticipo() {
+        return fechaVtoAnticipo;
+    }
+
+    public void setFechaVtoAnticipo(LocalDate fechaVtoAnticipo) {
+        this.fechaVtoAnticipo = fechaVtoAnticipo;
+    }
+
+    @Override
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    @Override
+    public double calcularCuotas() {
+        return 0;
     }
 }

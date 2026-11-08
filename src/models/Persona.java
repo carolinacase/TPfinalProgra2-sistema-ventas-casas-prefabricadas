@@ -57,6 +57,11 @@ public abstract class Persona {
         this.correo = correo;
     }
 
+    // Método común a todas las personas
+    public String getNombreCompleto() {
+        return nombre + " " + apellido;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
