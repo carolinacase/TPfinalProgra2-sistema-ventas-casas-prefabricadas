@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class Credito {
     private boolean dniPresentado;
     private boolean reciboSueldoPresentado;
@@ -35,6 +37,27 @@ public class Credito {
 
     public void setReciboSueldoPresentado(boolean reciboSueldoPresentado) {
         this.reciboSueldoPresentado = reciboSueldoPresentado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Credito credito = (Credito) o;
+        return dniPresentado == credito.dniPresentado && reciboSueldoPresentado == credito.reciboSueldoPresentado && servicioPresentado == credito.servicioPresentado && aprobado == credito.aprobado;
+    }
+
+    @Override
+    public String toString() {
+        return "Credito(" +
+                "dniPresentado: " + dniPresentado +
+                ", reciboSueldoPresentado: " + reciboSueldoPresentado +
+                ", servicioPresentado: " + servicioPresentado +
+                ", aprobado: " + aprobado + ')';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dniPresentado, reciboSueldoPresentado, servicioPresentado, aprobado);
     }
 
     public boolean isServicioPresentado() {
