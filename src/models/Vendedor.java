@@ -32,9 +32,4 @@ public class Vendedor extends Empleado{
     public String toString() {
         return "Vendedor[" + "clientes: " + clientes + ", ventas: " + ventas + ']';
     }
-
-    @Override
-    public String getNombreCompleto() {
-        return getNombre() + " - " + getApellido();
-    }
 }

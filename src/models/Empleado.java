@@ -51,9 +51,4 @@ public abstract class Empleado extends Persona{
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
     }
-
-    @Override
-    public String getNombreCompleto() {
-        return getNombre() + " - " + getApellido();
-    }
 }
