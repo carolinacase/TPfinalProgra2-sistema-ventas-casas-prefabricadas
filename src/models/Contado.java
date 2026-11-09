@@ -31,14 +31,13 @@ public class Contado extends Venta{
         this.modalidad = modalidad;
     }
 
-    // Métodos de IPagable: una venta de contado no tiene cuotas
     @Override
     public double calcularCuotas() {
-        return 0;
+        return super.calcularCuotas();
     }
 
     @Override
     public int getCantidadCuotas() {
-        return 0;
+        return super.getCantidadCuotas();
     }
 }
