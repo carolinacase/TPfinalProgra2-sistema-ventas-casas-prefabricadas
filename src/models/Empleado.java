@@ -51,4 +51,13 @@ public abstract class Empleado extends Persona{
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
     }
+
+    @Override
+    public String toString() {
+        return "Empleado{" +
+                "id=" + id +
+                ", activo=" + activo +
+                ", fechaIngreso=" + fechaIngreso +
+                "} " + super.toString();
+    }
 }
