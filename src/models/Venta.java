@@ -82,9 +82,29 @@ public abstract class Venta implements IPagable {
         return Objects.hashCode(idVenta);
     }
 
+    @Override
+    public String toString(){
+        return "Venta[ idVenta: " + idVenta + ", fechaSenia: " + fechaSenia + ", montoSenia: " + montoSenia
+                + ", cliente: " + cliente +  ", vendedor: " + vendedor + ", cotización: " + "]";
+    }
+
     public void validar(){
         if(cliente == null || vendedor == null || cotizacion == null){
             throw new IllegalArgumentException("Faltan datos para registrar la venta");
         }
+    }
+
+    public double calcularSaldo(){
+        return cotizacion.calcularPrecio() - montoSenia;
+    }
+
+    @Override
+    public double calcularCuotas() {
+        return 0;
+    }
+
+    @Override
+    public int getCantidadCuotas() {
+        return 0;
     }
 }
