@@ -1,8 +1,10 @@
 package models;
 
+import Interface.IIdUnico;
+
 import java.util.Objects;
 
-public abstract class Persona {
+public abstract class Persona implements IIdUnico {
     private String nombre;
     private String apellido;
     private String dni;

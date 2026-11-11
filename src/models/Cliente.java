@@ -14,4 +14,9 @@ public class Cliente extends Persona {
                 "llave=" + llave +
                 "} " + super.toString();
     }
+
+    @Override
+    public String getIdUnico() {
+        return this.getDni();
+    }
 }

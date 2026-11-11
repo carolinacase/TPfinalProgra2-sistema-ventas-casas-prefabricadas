@@ -32,4 +32,9 @@ public class Vendedor extends Empleado{
     public String toString() {
         return "Vendedor[" + "clientes: " + clientes + ", ventas: " + ventas + ']';
     }
+
+    @Override
+    public String getIdUnico() {
+        return this.getDni();
+    }
 }
