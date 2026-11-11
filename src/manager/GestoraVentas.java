@@ -1,6 +1,5 @@
 package manager;
 
-import Interface.IIdUnico;
 import models.Venta;
 
 import java.util.HashMap;
