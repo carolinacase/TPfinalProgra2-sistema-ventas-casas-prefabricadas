@@ -22,4 +22,9 @@ public class Administrativo extends Empleado{
     public String toString() {
         return "Administrativo" + super.toString();
     }
+
+    @Override
+    public String getIdUnico() {
+        return this.getDni();
+    }
 }
