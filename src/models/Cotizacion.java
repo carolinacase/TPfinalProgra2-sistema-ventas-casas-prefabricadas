@@ -15,7 +15,7 @@ public class Cotizacion {
     private ModeloCasa modeloCasa;
     private double m2;
     private boolean incluyePlatea;
-    private static double VALOR_PLATEA_M2 = 65000;
+    private static final double VALOR_PLATEA_M2 = 65000;
 
     public Cotizacion(int id, LocalDate fecha, boolean aceptada,
                       MedioContacto medioContacto, ModeloCasa modeloCasa, double m2, boolean incluyePlatea) {
@@ -86,10 +86,6 @@ public class Cotizacion {
 
     public static double getValorPlateaM2() {
         return VALOR_PLATEA_M2;
-    }
-
-    public static void setValorPlateaM2(double valorPlateaM2) {
-        VALOR_PLATEA_M2 = valorPlateaM2;
     }
 
     @Override

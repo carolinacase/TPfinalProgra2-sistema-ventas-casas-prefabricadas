@@ -58,5 +58,5 @@ public abstract class GestoraGenerica<T, K> {
         }
     }
 
-    public abstract boolean actualizar(T elementoAActualizar);
+    public abstract void actualizar(T elementoAActualizar);
 }
