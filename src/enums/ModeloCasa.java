@@ -3,7 +3,7 @@ package enums;
 public enum ModeloCasa {
     BASICO(550000),
     ESTANDAR(650000),
-    PRIMIUM(700000);
+    PREMIUM(700000);
 
     private double valorM2;
 

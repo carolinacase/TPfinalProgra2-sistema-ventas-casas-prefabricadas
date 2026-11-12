@@ -39,6 +39,19 @@ public class Credito {
         this.reciboSueldoPresentado = reciboSueldoPresentado;
     }
 
+    public boolean isServicioPresentado() {
+        return servicioPresentado;
+    }
+
+    public void setServicioPresentado(boolean servicioPresentado) {
+        this.servicioPresentado = servicioPresentado;
+    }
+
+    public boolean documentacionCompleta(){
+        return dniPresentado && reciboSueldoPresentado && servicioPresentado;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -60,15 +73,4 @@ public class Credito {
         return Objects.hash(dniPresentado, reciboSueldoPresentado, servicioPresentado, aprobado);
     }
 
-    public boolean isServicioPresentado() {
-        return servicioPresentado;
-    }
-
-    public void setServicioPresentado(boolean servicioPresentado) {
-        this.servicioPresentado = servicioPresentado;
-    }
-
-    public boolean documentacionCompleta(){
-        return dniPresentado && reciboSueldoPresentado && servicioPresentado;
-    }
 }
