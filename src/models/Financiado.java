@@ -38,6 +38,13 @@ public class Financiado extends Venta{
         this.fechaVtoAnticipo = fechaVtoAnticipo;
     }
 
+    public double calcularAnticipo(){
+        anticipo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
+
+        return anticipo;
+
+    }
+
     @Override
     public String toString() {
         return "Financiado(" + "anticipo: " + anticipo +
@@ -53,6 +60,6 @@ public class Financiado extends Venta{
 
     @Override
     public double calcularCuotas() {
-        return calcularSaldo() / cantidadCuotas;
+        return calcularSaldo() / (cantidadCuotas * TASA_MENSUAL);
     }
 }

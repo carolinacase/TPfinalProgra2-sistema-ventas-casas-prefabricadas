@@ -80,13 +80,15 @@ public class Cotizacion {
 
     public double calcularPrecio(){
 
+        double precio = this.m2 * this.modeloCasa.getValorM2();
+
         if(incluyePlatea){
 
-            return (this.m2 * VALOR_PLATEA_M2) * this.modeloCasa.getValorM2();
+            return precio + (this.m2 * VALOR_PLATEA_M2);
 
-        }else {
-            return this.m2 * this.modeloCasa.getValorM2();
         }
+
+        return precio;
     }
 
     @Override
