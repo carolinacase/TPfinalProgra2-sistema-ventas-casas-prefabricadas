@@ -1,15 +1,15 @@
 package models;
 
-import Interface.IPagable;
 import enums.EstadoVenta;
 import exception.VentaInvalidaException;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public abstract class Venta implements IPagable {
+public abstract class Venta{
     private int idVenta;
     private LocalDate fechaSenia;
+    private LocalDate fechaVto = fechaSenia.plusDays(15);
     private double montoSenia;
     private EstadoVenta estado;
     private Cliente cliente;
@@ -44,6 +44,10 @@ public abstract class Venta implements IPagable {
 
     public double getMontoSenia() {
         return montoSenia;
+    }
+
+    public LocalDate getFechaVto() {
+        return fechaVto;
     }
 
     public void setMontoSenia(double montoSenia) {
