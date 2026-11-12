@@ -1,6 +1,7 @@
 package models;
 
 import enums.EstadoVenta;
+import exception.AnticipoInsuficienteException;
 
 import java.time.LocalDate;
 
@@ -38,11 +39,26 @@ public class Financiado extends Venta{
         this.fechaVtoAnticipo = fechaVtoAnticipo;
     }
 
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    public Credito getCredito() {
+        return credito;
+    }
+
     public double calcularAnticipo(){
         anticipo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
 
         return anticipo;
 
+    }
+
+    public void validarAnticipo() throws AnticipoInsuficienteException {
+        double minimo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
+        if (anticipo < minimo) {
+            throw new AnticipoInsuficienteException("El anticipo debe ser de al menos $" + minimo);
+        }
     }
 
     @Override
