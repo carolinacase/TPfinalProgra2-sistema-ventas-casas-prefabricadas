@@ -1,6 +1,7 @@
 package models;
 
 import Interface.IPagable;
+import enums.EstadoVenta;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -9,14 +10,16 @@ public abstract class Venta implements IPagable {
     private int idVenta;
     private LocalDate fechaSenia;
     private double montoSenia;
+    private EstadoVenta estado;
     private Cliente cliente;
     private Vendedor vendedor;
     private Cotizacion cotizacion;
 
-    public Venta(int idVenta, LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion) {
+    public Venta(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion) {
         this.idVenta = idVenta;
         this.fechaSenia = fechaSenia;
         this.montoSenia = montoSenia;
+        this.estado = estado;
         this.cliente = cliente;
         this.vendedor = vendedor;
         this.cotizacion = cotizacion;
@@ -46,6 +49,14 @@ public abstract class Venta implements IPagable {
         this.montoSenia = montoSenia;
     }
 
+    public EstadoVenta getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoVenta estado) {
+        this.estado = estado;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -70,6 +81,14 @@ public abstract class Venta implements IPagable {
         this.cotizacion = cotizacion;
     }
 
+    public abstract double calcularSaldo();
+
+    public void validar(){
+        if(cliente == null || vendedor == null || cotizacion == null){
+            throw new IllegalArgumentException("Faltan datos para registrar la venta");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -86,25 +105,5 @@ public abstract class Venta implements IPagable {
     public String toString(){
         return "Venta[ idVenta: " + idVenta + ", fechaSenia: " + fechaSenia + ", montoSenia: " + montoSenia
                 + ", cliente: " + cliente +  ", vendedor: " + vendedor + ", cotización: " + "]";
-    }
-
-    public void validar(){
-        if(cliente == null || vendedor == null || cotizacion == null){
-            throw new IllegalArgumentException("Faltan datos para registrar la venta");
-        }
-    }
-
-    public double calcularSaldo(){
-        return cotizacion.calcularPrecio() - montoSenia;
-    }
-
-    @Override
-    public double calcularCuotas() {
-        return 0;
-    }
-
-    @Override
-    public int getCantidadCuotas() {
-        return 0;
     }
 }

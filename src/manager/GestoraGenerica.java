@@ -1,7 +1,5 @@
 package manager;
 
-import Interface.IIdUnico;
-
 import java.util.HashMap;
 
 public abstract class GestoraGenerica<T, K> {

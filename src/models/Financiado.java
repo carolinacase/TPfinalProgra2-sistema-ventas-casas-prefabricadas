@@ -1,5 +1,7 @@
 package models;
 
+import enums.EstadoVenta;
+
 import java.time.LocalDate;
 
 public class Financiado extends Venta{
@@ -10,9 +12,10 @@ public class Financiado extends Venta{
     private int cantidadCuotas;
     private Credito credito;
 
-    public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion,
-                      double anticipo, LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
-        super(idVenta, fechaSenia, montoSenia, cliente, vendedor, cotizacion);
+    public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado,
+                      Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, double anticipo,
+                      LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
+        super(idVenta, fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
         this.anticipo = anticipo;
         this.fechaVtoAnticipo = fechaVtoAnticipo;
         this.cantidadCuotas = cantidadCuotas;
@@ -44,8 +47,8 @@ public class Financiado extends Venta{
     }
 
     @Override
-    public int getCantidadCuotas() {
-        return cantidadCuotas;
+    public double calcularSaldo() {
+        return getCotizacion().calcularPrecio() - getMontoSenia() - anticipo;
     }
 
     @Override

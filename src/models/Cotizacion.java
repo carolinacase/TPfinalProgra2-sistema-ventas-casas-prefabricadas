@@ -10,18 +10,16 @@ public class Cotizacion {
 
     private int id;
     private LocalDate fecha;
-    private boolean aceptada;
     private MedioContacto medioContacto;
     private ModeloCasa modeloCasa;
     private double m2;
     private boolean incluyePlatea;
     private static final double VALOR_PLATEA_M2 = 65000;
 
-    public Cotizacion(int id, LocalDate fecha, boolean aceptada,
+    public Cotizacion(int id, LocalDate fecha,
                       MedioContacto medioContacto, ModeloCasa modeloCasa, double m2, boolean incluyePlatea) {
         this.id = id;
         this.fecha = fecha;
-        this.aceptada = aceptada;
         this.medioContacto = medioContacto;
         this.modeloCasa = modeloCasa;
         this.m2 = m2;
@@ -42,14 +40,6 @@ public class Cotizacion {
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
-    }
-
-    public boolean isAceptada() {
-        return aceptada;
-    }
-
-    public void setAceptada(boolean aceptada) {
-        this.aceptada = aceptada;
     }
 
     public MedioContacto getMedioContacto() {
@@ -88,6 +78,17 @@ public class Cotizacion {
         return VALOR_PLATEA_M2;
     }
 
+    public double calcularPrecio(){
+
+        if(incluyePlatea){
+
+            return (this.m2 * VALOR_PLATEA_M2) * this.modeloCasa.getValorM2();
+
+        }else {
+            return this.m2 * this.modeloCasa.getValorM2();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -100,7 +101,4 @@ public class Cotizacion {
         return Objects.hashCode(id);
     }
 
-    public double calcularPrecio(){
-        return 0;
-    }
 }
