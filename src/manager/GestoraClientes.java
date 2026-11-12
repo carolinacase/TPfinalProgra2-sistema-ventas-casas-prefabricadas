@@ -1,4 +1,9 @@
 package manager;
 
-public class GestoraClientes {
+import Interface.IIdUnico;
+import models.Cliente;
+
+public class GestoraClientes extends GestoraGenerica<Cliente, String> {
+
+
 }

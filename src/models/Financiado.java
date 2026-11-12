@@ -1,5 +1,8 @@
 package models;
 
+import enums.EstadoVenta;
+import exception.AnticipoInsuficienteException;
+
 import java.time.LocalDate;
 
 public class Financiado extends Venta{
@@ -10,9 +13,10 @@ public class Financiado extends Venta{
     private int cantidadCuotas;
     private Credito credito;
 
-    public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion,
-                      double anticipo, LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
-        super(idVenta, fechaSenia, montoSenia, cliente, vendedor, cotizacion);
+    public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado,
+                      Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, double anticipo,
+                      LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
+        super(idVenta, fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
         this.anticipo = anticipo;
         this.fechaVtoAnticipo = fechaVtoAnticipo;
         this.cantidadCuotas = cantidadCuotas;
@@ -35,6 +39,28 @@ public class Financiado extends Venta{
         this.fechaVtoAnticipo = fechaVtoAnticipo;
     }
 
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    public Credito getCredito() {
+        return credito;
+    }
+
+    public double calcularAnticipo(){
+        anticipo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
+
+        return anticipo;
+
+    }
+
+    public void validarAnticipo() throws AnticipoInsuficienteException {
+        double minimo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
+        if (anticipo < minimo) {
+            throw new AnticipoInsuficienteException("El anticipo debe ser de al menos $" + minimo);
+        }
+    }
+
     @Override
     public String toString() {
         return "Financiado(" + "anticipo: " + anticipo +
@@ -44,12 +70,12 @@ public class Financiado extends Venta{
     }
 
     @Override
-    public int getCantidadCuotas() {
-        return cantidadCuotas;
+    public double calcularSaldo() {
+        return getCotizacion().calcularPrecio() - getMontoSenia() - anticipo;
     }
 
     @Override
     public double calcularCuotas() {
-        return calcularSaldo() / cantidadCuotas;
+        return calcularSaldo() / (cantidadCuotas * TASA_MENSUAL);
     }
 }

@@ -1,43 +1,30 @@
 package models;
 
-import enums.ModalidadContado;
+import enums.EstadoVenta;
+import enums.PlanContado;
 
 import java.time.LocalDate;
 
 public class Contado extends Venta{
-    private LocalDate fechaVto;
-    private ModalidadContado modalidad;
+    private PlanContado modalidad;
 
-    public Contado(int idVenta, LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor,
-                   Cotizacion cotizacion, LocalDate fechaVto, ModalidadContado modalidad) {
-        super(idVenta, fechaSenia, montoSenia, cliente, vendedor, cotizacion);
-        this.fechaVto = fechaVto;
+    public Contado(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, PlanContado modalidad) {
+        super(idVenta, fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
         this.modalidad = modalidad;
     }
 
-    public LocalDate getFechaVto() {
-        return fechaVto;
-    }
-
-    public void setFechaVto(LocalDate fechaVto) {
-        this.fechaVto = fechaVto;
-    }
-
-    public ModalidadContado getModalidad() {
+    public PlanContado getModalidad() {
         return modalidad;
     }
 
-    public void setModalidad(ModalidadContado modalidad) {
+    public void setModalidad(PlanContado modalidad) {
         this.modalidad = modalidad;
     }
 
     @Override
-    public double calcularCuotas() {
-        return super.calcularCuotas();
+    public double calcularSaldo() {
+        return getCotizacion().calcularPrecio() - getMontoSenia();
     }
 
-    @Override
-    public int getCantidadCuotas() {
-        return super.getCantidadCuotas();
-    }
+
 }
