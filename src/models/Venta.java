@@ -2,6 +2,7 @@ package models;
 
 import Interface.IPagable;
 import enums.EstadoVenta;
+import exception.VentaInvalidaException;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -83,10 +84,17 @@ public abstract class Venta implements IPagable {
 
     public abstract double calcularSaldo();
 
-    public void validar(){
-        if(cliente == null || vendedor == null || cotizacion == null){
-            throw new IllegalArgumentException("Faltan datos para registrar la venta");
-        }
+    public void validar() throws VentaInvalidaException {
+            if (cliente == null) {
+                throw new VentaInvalidaException("La venta no tiene cliente asignado");
+            }
+            if (vendedor == null) {
+                throw new VentaInvalidaException("La venta no tiene vendedor asignado");
+            }
+            if (cotizacion == null) {
+                throw new VentaInvalidaException("La venta no tiene una cotización asociada");
+            }
+
     }
 
     @Override
