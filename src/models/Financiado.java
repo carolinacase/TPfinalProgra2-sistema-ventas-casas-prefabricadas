@@ -55,10 +55,13 @@ public class Financiado extends Venta{
     }
 
     public void validarAnticipo() throws AnticipoInsuficienteException {
+
         double minimo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
+
         if (anticipo < minimo) {
             throw new AnticipoInsuficienteException("El anticipo debe ser de al menos $" + minimo);
         }
+
     }
 
     @Override
@@ -74,8 +77,4 @@ public class Financiado extends Venta{
         return getCotizacion().calcularPrecio() - getMontoSenia() - anticipo;
     }
 
-    @Override
-    public double calcularCuotas() {
-        return calcularSaldo() / (cantidadCuotas * TASA_MENSUAL);
-    }
 }
