@@ -39,7 +39,7 @@ public class ConexionClientes {
             ps.setString(3,c.getDni());
             ps.setString(4, c.getDomicilio());
             ps.setString(5,c.getCorreo());
-            ps.setString(6,c.getllave);
+            ps.setInt(6,c.getLlave());
             ps.executeUpdate();
         }catch(SQLException e){
             throw new DBCreationTableException("No se pudo insertar el cliente");
@@ -57,10 +57,14 @@ public class ConexionClientes {
             Map<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
             Cliente c;
             while(rs.next()){
-                c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"));
+                c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"), rs.getInt("llave"));
+                clientes.put(rs.getInt("llave"),c);
             }
         }catch (SQLException e){
-
+            throw new DBCreationTableException("No se pudo obtener el cliente");
+        }
+        finally{
+            conexion.close();
         }
     }
 }
