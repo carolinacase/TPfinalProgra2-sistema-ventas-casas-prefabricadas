@@ -73,7 +73,7 @@ public class Financiado extends Venta{
 
     @Override
     public double calcularSaldo() {
-        return getCotizacion().calcularPrecio() - getMontoSenia() - anticipo;
+        return getPrecioTotal() - getMontoSenia() - anticipo - getMontoPagado();
     }
 
 }
