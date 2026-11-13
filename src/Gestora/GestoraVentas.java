@@ -3,6 +3,7 @@ package Gestora;
 import Enumeradores.EstadoVenta;
 import Enumeradores.ModeloCasa;
 import Modelo.Financiado;
+import Modelo.Pago;
 import Modelo.Venta;
 
 import java.time.LocalDate;
@@ -11,6 +12,26 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
+
+    public List<Pago> verificarPagosDeHoy(){
+
+        List<Pago> pagosDeHoy = new ArrayList<>();
+        LocalDate hoy = LocalDate.now();
+
+        for(Venta v : listadoElementos.values()){
+
+            for(Pago p : v.getHistorialDePagos()){
+
+                if(p.getFecha().equals(hoy)){
+
+                    pagosDeHoy.add(p);
+
+                }
+            }
+        }
+
+        return pagosDeHoy;
+    }
 
     private void menuDeActualizar(){
         System.out.println("Que campo desea modificar?");
@@ -91,6 +112,8 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                     break;
                 default:
                     System.out.println("Opcion invalida");
+
+                    break;
             }
         }while (opcion != 0);
 
