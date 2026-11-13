@@ -9,7 +9,7 @@ import java.util.Objects;
 public abstract class Venta{
     private int idVenta;
     private LocalDate fechaSenia;
-    private LocalDate fechaVto = fechaSenia.plusDays(15);
+    private LocalDate fechaVto;
     private double montoSenia;
     private EstadoVenta estado;
     private Cliente cliente;
@@ -19,6 +19,7 @@ public abstract class Venta{
     public Venta(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion) {
         this.idVenta = idVenta;
         this.fechaSenia = fechaSenia;
+        this.fechaVto = fechaSenia.plusDays(15);
         this.montoSenia = montoSenia;
         this.estado = estado;
         this.cliente = cliente;

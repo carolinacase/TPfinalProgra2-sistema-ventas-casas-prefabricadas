@@ -5,10 +5,12 @@ import Enumeradores.ModeloCasa;
 import Modelo.Financiado;
 import Modelo.Venta;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
-
 
     private void menuDeActualizar(){
         System.out.println("Que campo desea modificar?");
