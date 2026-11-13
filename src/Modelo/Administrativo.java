@@ -1,12 +1,14 @@
 package Modelo;
 
+import Enumeradores.EstadoEmpleados;
 import Excepciones.DocumentacionIncompletaException;
 
 import java.time.LocalDate;
 
 public class Administrativo extends Empleado{
-    public Administrativo(String nombre, String apellido, String dni, String domicilio, String correo, int id, boolean activo, LocalDate fechaIngreso) {
-        super(nombre, apellido, dni, domicilio, correo, id, activo, fechaIngreso);
+
+    public Administrativo(String nombre, String apellido, String dni, String domicilio, String correo, int id, EstadoEmpleados estado, LocalDate fechaIngreso) {
+        super(nombre, apellido, dni, domicilio, correo, id, estado, fechaIngreso);
     }
 
     public void aprobarCredito(Financiado f) throws DocumentacionIncompletaException {
