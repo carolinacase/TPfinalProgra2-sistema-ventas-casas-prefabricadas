@@ -6,7 +6,6 @@ import Excepciones.AnticipoInsuficienteException;
 import java.time.LocalDate;
 
 public class Financiado extends Venta{
-    private static final double TASA_MENSUAL = 0.02;
     private static final double PRIMER_ANTICIPO = 0.30;
     private double anticipo;
     private LocalDate fechaVtoAnticipo;
