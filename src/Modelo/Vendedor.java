@@ -1,4 +1,6 @@
 package Modelo;
+import Enumeradores.EstadoEmpleados;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +8,8 @@ public class Vendedor extends Empleado{
     private List<Cliente> clientes;
     private List<Venta> ventas;
 
-    public Vendedor(String nombre, String apellido, String dni, String domicilio, String correo, int id, boolean activo, LocalDate fechaIngreso){
-        super(nombre, apellido, dni, domicilio, correo, id, activo, fechaIngreso);
+    public Vendedor(String nombre, String apellido, String dni, String domicilio, String correo, int id, EstadoEmpleados estado, LocalDate fechaIngreso) {
+        super(nombre, apellido, dni, domicilio, correo, id, estado, fechaIngreso);
         this.clientes = new ArrayList<>();
         this.ventas = new ArrayList<>();
     }
