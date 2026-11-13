@@ -1,4 +1,4 @@
-package enums;
+package Enumeradores;
 
 public enum EstadoVenta {
     ACTIVA(true), INACTIVA(false);

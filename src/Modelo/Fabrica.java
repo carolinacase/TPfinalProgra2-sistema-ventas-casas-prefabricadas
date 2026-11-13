@@ -1,6 +1,6 @@
-package models;
+package Modelo;
 
-import enums.EstadoFabricacion;
+import Enumeradores.EstadoFabricacion;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,6 @@
-package manager;
+package Gestora;
 
-import Interface.IIdUnico;
-import models.Cliente;
+import Modelo.Cliente;
 
 public class GestoraClientes extends GestoraGenerica<Cliente, String> {
 

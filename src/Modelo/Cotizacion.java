@@ -1,7 +1,7 @@
-package models;
+package Modelo;
 
-import enums.MedioContacto;
-import enums.ModeloCasa;
+import Enumeradores.MedioContacto;
+import Enumeradores.ModeloCasa;
 
 import java.time.LocalDate;
 import java.util.Objects;

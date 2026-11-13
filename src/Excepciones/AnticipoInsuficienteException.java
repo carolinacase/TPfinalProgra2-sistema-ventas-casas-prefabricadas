@@ -1,4 +1,4 @@
-package exception;
+package Excepciones;
 
 public class AnticipoInsuficienteException extends Exception {
     public AnticipoInsuficienteException(String message) {

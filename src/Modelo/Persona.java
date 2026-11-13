@@ -1,4 +1,4 @@
-package models;
+package Modelo;
 
 import Interface.IIdUnico;
 
@@ -59,7 +59,7 @@ public abstract class Persona implements IIdUnico {
         this.correo = correo;
     }
 
-    // Método común a todas las personas
+
     public String getNombreCompleto() {
         return nombre + " " + apellido;
     }

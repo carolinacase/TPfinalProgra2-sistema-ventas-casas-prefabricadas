@@ -1,11 +1,10 @@
-package manager;
+package Gestora;
 
-import enums.EstadoVenta;
-import enums.ModeloCasa;
-import models.Financiado;
-import models.Venta;
+import Enumeradores.EstadoVenta;
+import Enumeradores.ModeloCasa;
+import Modelo.Financiado;
+import Modelo.Venta;
 
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class GestoraVentas extends GestoraGenerica<Venta, Integer>{

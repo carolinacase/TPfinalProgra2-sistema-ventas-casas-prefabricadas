@@ -1,4 +1,4 @@
-package enums;
+package Enumeradores;
 
 public enum MedioContacto {
     REDES,

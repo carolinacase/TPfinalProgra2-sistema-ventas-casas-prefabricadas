@@ -1,4 +1,4 @@
-package manager;
+package Gestora;
 
 import java.util.HashMap;
 

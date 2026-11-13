@@ -1,7 +1,7 @@
-package models;
+package Modelo;
 
-import enums.EstadoVenta;
-import exception.AnticipoInsuficienteException;
+import Enumeradores.EstadoVenta;
+import Excepciones.AnticipoInsuficienteException;
 
 import java.time.LocalDate;
 

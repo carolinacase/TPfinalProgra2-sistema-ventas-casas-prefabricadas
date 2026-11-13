@@ -1,7 +1,7 @@
-package models;
+package Modelo;
 
-import enums.EstadoVenta;
-import enums.PlanContado;
+import Enumeradores.EstadoVenta;
+import Enumeradores.PlanContado;
 
 import java.time.LocalDate;
 

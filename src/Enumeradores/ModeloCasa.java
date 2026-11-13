@@ -1,4 +1,4 @@
-package enums;
+package Enumeradores;
 
 public enum ModeloCasa {
     BASICO(550000),

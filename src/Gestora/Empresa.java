@@ -1,4 +1,4 @@
-package manager;
+package Gestora;
 
 public class Empresa {
 }

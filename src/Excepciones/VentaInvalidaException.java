@@ -1,4 +1,4 @@
-package exception;
+package Excepciones;
 
 public class VentaInvalidaException extends Exception {
     public VentaInvalidaException(String message) {

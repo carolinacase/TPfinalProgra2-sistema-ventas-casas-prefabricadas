@@ -1,4 +1,4 @@
-package enums;
+package Enumeradores;
 
 public enum PlanFinanciacion {
     PRIMER_ANIO(12),

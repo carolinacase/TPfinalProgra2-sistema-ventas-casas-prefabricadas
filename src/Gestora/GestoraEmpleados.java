@@ -1,7 +1,6 @@
-package manager;
+package Gestora;
 
-import Interface.IIdUnico;
-import models.Empleado;
+import Modelo.Empleado;
 
 public class GestoraEmpleados extends GestoraGenerica<Empleado, String>{
 

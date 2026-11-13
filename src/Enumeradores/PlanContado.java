@@ -1,4 +1,4 @@
-package enums;
+package Enumeradores;
 
 public enum PlanContado {
     PAGO_TOTAL(1),
