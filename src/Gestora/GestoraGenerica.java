@@ -39,7 +39,6 @@ public abstract class GestoraGenerica<T, K> {
     public String listar(){
 
         if(listadoElementos.isEmpty()){
-
             return "Lista vacia";
         }else {
 
