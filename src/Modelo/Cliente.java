@@ -8,6 +8,14 @@ public class Cliente extends Persona {
         this.llave=llave;
     }
 
+    public int getLlave() {
+        return llave;
+    }
+
+    public void setLlave(int llave) {
+        this.llave = llave;
+    }
+
     @Override
     public String toString() {
         return "Cliente{" +
