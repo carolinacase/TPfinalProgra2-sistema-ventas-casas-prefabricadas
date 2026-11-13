@@ -3,7 +3,7 @@ package manager;
 import java.util.HashMap;
 
 public abstract class GestoraGenerica<T, K> {
-    private HashMap<K, T> listadoElementos;
+    protected HashMap<K, T> listadoElementos;
 
     public GestoraGenerica() {
         this.listadoElementos = new HashMap<>();
@@ -39,7 +39,6 @@ public abstract class GestoraGenerica<T, K> {
     public String listar(){
 
         if(listadoElementos.isEmpty()){
-
             return "Lista vacia";
         }else {
 
