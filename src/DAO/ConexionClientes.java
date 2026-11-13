@@ -41,7 +41,9 @@ public class ConexionClientes {
             ps.setString(5,c.getCorreo());
             ps.executeUpdate();
         }catch(SQLException e){
-            
+            throw new DBCreationTableException("No se pudo insertar el cliente");
+        }finally {
+            ConexionBD.cerrarConexion();
         }
     }
 }
