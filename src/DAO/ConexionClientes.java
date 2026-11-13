@@ -18,6 +18,7 @@ public class ConexionClientes {
                     "  dni VARCHAR(8) NOT NULL," +
                     "  domicilio VARCHAR(20) NOT NULL," +
                     "  correo VARCHAR(20) NOT NULL," +
+                    "  llave INT NOT NULL," +
                     "  PRIMARY KEY (dni));";
             Statement ps = conexion.createStatement();
             ps.execute(query);
@@ -49,22 +50,23 @@ public class ConexionClientes {
     }
     public static Map<Integer, Cliente> obtenerClientes() throws DBCreationTableException, DBConexionException, SQLException {
         Connection conexion = ConexionBD.obtenerConexion();
-;        String query = "SELECT * FROM clientes;";
+;        String query = "SELECT * FROM clientes";
+        Map<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
         try{
             Statement ps = conexion.createStatement();
-
             ResultSet rs = ps.executeQuery(query);
-            Map<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
             Cliente c;
             while(rs.next()){
                 c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"), rs.getInt("llave"));
                 clientes.put(rs.getInt("llave"),c);
             }
+
         }catch (SQLException e){
             throw new DBCreationTableException("No se pudo obtener el cliente");
         }
         finally{
-            conexion.close();
+            ConexionBD.cerrarConexion();
         }
+        return clientes;
     }
 }
