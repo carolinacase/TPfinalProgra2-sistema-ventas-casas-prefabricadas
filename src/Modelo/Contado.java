@@ -23,7 +23,7 @@ public class Contado extends Venta{
 
     @Override
     public double calcularSaldo() {
-        return getCotizacion().calcularPrecio() - getMontoSenia();
+        return getPrecioTotal() - getMontoSenia() - getMontoPagado();
     }
 
 

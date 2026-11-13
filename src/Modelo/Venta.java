@@ -4,6 +4,8 @@ import Enumeradores.EstadoVenta;
 import Excepciones.VentaInvalidaException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Venta{
@@ -11,6 +13,9 @@ public abstract class Venta{
     private LocalDate fechaSenia;
     private LocalDate fechaVto;
     private double montoSenia;
+    private double montoPagado;
+    private double precioTotal;
+    private List<Pago> historialDePagos;
     private EstadoVenta estado;
     private Cliente cliente;
     private Vendedor vendedor;
@@ -21,6 +26,9 @@ public abstract class Venta{
         this.fechaSenia = fechaSenia;
         this.fechaVto = fechaSenia.plusDays(15);
         this.montoSenia = montoSenia;
+        this.montoPagado = 0.0;
+        this.precioTotal = cotizacion.calcularPrecio();
+        this.historialDePagos = new ArrayList<>();
         this.estado = estado;
         this.cliente = cliente;
         this.vendedor = vendedor;
@@ -53,6 +61,22 @@ public abstract class Venta{
 
     public void setMontoSenia(double montoSenia) {
         this.montoSenia = montoSenia;
+    }
+
+    public double getMontoPagado() {
+        return montoPagado;
+    }
+
+    public void setMontoPagado(double montoPagado) {
+        this.montoPagado = montoPagado;
+    }
+
+    public double getPrecioTotal() {
+        return precioTotal;
+    }
+
+    public List<Pago> getHistorialDePagos() {
+        return historialDePagos;
     }
 
     public EstadoVenta getEstado() {
@@ -99,6 +123,17 @@ public abstract class Venta{
             if (cotizacion == null) {
                 throw new VentaInvalidaException("La venta no tiene una cotización asociada");
             }
+
+    }
+
+    public void registrarPago(LocalDate fecha, double monto){
+
+        Pago nuevoPago = new Pago(fecha, monto);
+
+        this.historialDePagos.add(nuevoPago);
+
+        this.montoPagado += monto;
+
 
     }
 
