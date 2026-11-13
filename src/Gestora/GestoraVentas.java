@@ -112,6 +112,8 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                     break;
                 default:
                     System.out.println("Opcion invalida");
+
+                    break;
             }
         }while (opcion != 0);
 

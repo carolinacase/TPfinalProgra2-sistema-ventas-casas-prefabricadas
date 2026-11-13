@@ -1,17 +1,19 @@
 package Modelo;
 
+import Enumeradores.EstadoEmpleados;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class Empleado extends Persona{
     private int id;
-    private boolean activo;
+    private EstadoEmpleados estado;
     private LocalDate fechaIngreso;
 
-    public Empleado(String nombre, String apellido, String dni, String domicilio, String correo, int id, boolean activo, LocalDate fechaIngreso) {
+    public Empleado(String nombre, String apellido, String dni, String domicilio, String correo, int id, EstadoEmpleados estado, LocalDate fechaIngreso) {
         super(nombre, apellido, dni, domicilio, correo);
         this.id = id;
-        this.activo = activo;
+        this.estado = estado;
         this.fechaIngreso = fechaIngreso;
     }
 
@@ -23,12 +25,12 @@ public abstract class Empleado extends Persona{
         this.id = id;
     }
 
-    public boolean isActivo() {
-        return activo;
+    public EstadoEmpleados getEstado() {
+        return estado;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setEstado(EstadoEmpleados estado) {
+        this.estado = estado;
     }
 
     public LocalDate getFechaIngreso() {
@@ -56,8 +58,8 @@ public abstract class Empleado extends Persona{
     public String toString() {
         return "Empleado{" +
                 "id=" + id +
-                ", activo=" + activo +
+                ", estado=" + estado +
                 ", fechaIngreso=" + fechaIngreso +
-                "} " + super.toString();
+                '}';
     }
 }
