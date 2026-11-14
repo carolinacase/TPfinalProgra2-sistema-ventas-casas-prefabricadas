@@ -15,7 +15,7 @@ public class Financiado extends Venta{
     public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado,
                       Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, double anticipo,
                       LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
-        super(idVenta, fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
+        super(fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
         this.anticipo = anticipo;
         this.fechaVtoAnticipo = fechaVtoAnticipo;
         this.cantidadCuotas = cantidadCuotas;
@@ -68,7 +68,7 @@ public class Financiado extends Venta{
         return "Financiado(" + "anticipo: " + anticipo +
                 ", fechaVtoAnticipo:" + fechaVtoAnticipo +
                 ", cantidadCuotas: " + cantidadCuotas +
-                ", credito: " + credito + ')';
+                ", credito: " + credito + ')'+super.toString();
     }
 
     @Override
