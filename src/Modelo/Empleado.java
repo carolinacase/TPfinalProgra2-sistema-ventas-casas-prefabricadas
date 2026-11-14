@@ -43,9 +43,8 @@ public abstract class Empleado extends Persona{
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Empleado empleado)) return false;
         if (!super.equals(o)) return false;
-        Empleado empleado = (Empleado) o;
         return id == empleado.id;
     }
 
@@ -60,6 +59,6 @@ public abstract class Empleado extends Persona{
                 "id=" + id +
                 ", estado=" + estado +
                 ", fechaIngreso=" + fechaIngreso +
-                '}';
+                "} " + super.toString();
     }
 }
