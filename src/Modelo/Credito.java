@@ -54,8 +54,7 @@ public class Credito {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Credito credito = (Credito) o;
+        if (!(o instanceof Credito credito)) return false;
         return dniPresentado == credito.dniPresentado && reciboSueldoPresentado == credito.reciboSueldoPresentado && servicioPresentado == credito.servicioPresentado && aprobado == credito.aprobado;
     }
 

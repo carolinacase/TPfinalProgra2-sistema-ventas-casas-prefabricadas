@@ -93,8 +93,7 @@ public class Cotizacion {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Cotizacion that = (Cotizacion) o;
+        if (!(o instanceof Cotizacion that)) return false;
         return id == that.id;
     }
 
@@ -103,4 +102,15 @@ public class Cotizacion {
         return Objects.hashCode(id);
     }
 
+    @Override
+    public String toString() {
+        return "Cotizacion{" +
+                "id=" + id +
+                ", fecha=" + fecha +
+                ", medioContacto=" + medioContacto +
+                ", modeloCasa=" + modeloCasa +
+                ", m2=" + m2 +
+                ", incluyePlatea=" + incluyePlatea +
+                '}';
+    }
 }

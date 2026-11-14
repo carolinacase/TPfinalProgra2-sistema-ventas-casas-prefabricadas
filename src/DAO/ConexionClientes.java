@@ -40,7 +40,6 @@ public class ConexionClientes {
             ps.setString(3,c.getDni());
             ps.setString(4, c.getDomicilio());
             ps.setString(5,c.getCorreo());
-            ps.setInt(6,c.getLlave());
             ps.executeUpdate();
         }catch(SQLException e){
             throw new DBCreationTableException("No se pudo insertar el cliente");
@@ -50,14 +49,15 @@ public class ConexionClientes {
     }
     public static Map<Integer, Cliente> obtenerClientes() throws DBCreationTableException, DBConexionException, SQLException {
         Connection conexion = ConexionBD.obtenerConexion();
-;        String query = "SELECT * FROM clientes";
+        String query = "SELECT * FROM clientes";
         Map<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
+
         try{
             Statement ps = conexion.createStatement();
             ResultSet rs = ps.executeQuery(query);
             Cliente c;
             while(rs.next()){
-                c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"), rs.getInt("llave"));
+                c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"));
                 clientes.put(rs.getInt("llave"),c);
             }
 

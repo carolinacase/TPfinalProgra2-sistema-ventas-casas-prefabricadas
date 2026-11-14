@@ -33,16 +33,6 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         return pagosDeHoy;
     }
 
-    private void menuDeActualizar(){
-        System.out.println("Que campo desea modificar?");
-        System.out.println( "1. Monto del anticipo\n" +
-                            "2. Estado venta\n" +
-                            "3. Modelo de la casa\n" +
-                            "0. Salir del menu");
-
-    }
-
-
     @Override
     public void actualizar(Venta elementoAActualizar) {
 
@@ -51,8 +41,6 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         int opcion;
 
         do{
-            menuDeActualizar();
-
             opcion = sc.nextInt();
             sc.nextLine();
 
@@ -112,6 +100,8 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                     break;
                 default:
                     System.out.println("Opcion invalida");
+
+                    break;
             }
         }while (opcion != 0);
 
