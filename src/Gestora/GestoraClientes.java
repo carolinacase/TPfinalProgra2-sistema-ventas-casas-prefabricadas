@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class GestoraClientes extends GestoraGenerica<Cliente, String> {
 
-    public void menuDeActualizar(){
+    private void menuDeActualizar(){
         System.out.println("Que campo desea modificar?");
         System.out.println( "1. Domicilio\n" +
                             "2. Correo electronico\n" +
@@ -56,10 +56,10 @@ public class GestoraClientes extends GestoraGenerica<Cliente, String> {
         }while (opcion != 0);
     }
 
-    // Para buscar la llave, debemos usar get del listado de elementos creado en la gestora génerica
-    public Cliente buscarPorLlave(int llave){
 
-        return null;
+    public Cliente buscarCliente(String dni){
+
+        return this.listadoElementos.get(dni);
 
     }
 }
