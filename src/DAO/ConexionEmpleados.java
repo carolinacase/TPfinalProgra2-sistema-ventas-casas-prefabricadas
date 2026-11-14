@@ -15,7 +15,7 @@ public class ConexionEmpleados {
     public static void crearTabla() throws DBConexionException{
         try {
             Connection conexion = ConexionBD.obtenerConexion();
-            String query = "CREATE TABLE IF NOOT EXISTS empleados("
+            String query = "CREATE TABLE IF NOT EXISTS empleados("
                     + "nombre VARCHAR(50) NOT NULL,"
                     + "apellido VARCHAR(50) NOT NULL,"
                     + "dni VARCHAR(8) NOT NULL,"

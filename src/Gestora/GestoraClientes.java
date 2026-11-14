@@ -59,7 +59,7 @@ public class GestoraClientes extends GestoraGenerica<Cliente, String> {
     // Para buscar la llave, debemos usar get del listado de elementos creado en la gestora génerica
     public Cliente buscarPorLlave(int llave){
 
-
+        return null;
 
     }
 }
