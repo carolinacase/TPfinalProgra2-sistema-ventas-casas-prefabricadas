@@ -1,6 +1,7 @@
 package Modelo;
 
 import Enumeradores.EstadoVenta;
+import Enumeradores.PlanFinanciacion;
 import Excepciones.AnticipoInsuficienteException;
 
 import java.time.LocalDate;
@@ -9,12 +10,12 @@ public class Financiado extends Venta{
     private static final double PRIMER_ANTICIPO = 0.30;
     private double anticipo;
     private LocalDate fechaVtoAnticipo;
-    private int cantidadCuotas;
+    private PlanFinanciacion cantidadCuotas;
     private Credito credito;
 
     public Financiado(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado,
                       Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, double anticipo,
-                      LocalDate fechaVtoAnticipo, int cantidadCuotas, Credito credito) {
+                      LocalDate fechaVtoAnticipo, PlanFinanciacion cantidadCuotas, Credito credito) {
         super(fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
         this.anticipo = anticipo;
         this.fechaVtoAnticipo = fechaVtoAnticipo;
@@ -38,8 +39,12 @@ public class Financiado extends Venta{
         this.fechaVtoAnticipo = fechaVtoAnticipo;
     }
 
-    public int getCantidadCuotas() {
+    public PlanFinanciacion getCantidadCuotas() {
         return cantidadCuotas;
+    }
+
+    public void setCantidadCuotas(PlanFinanciacion cantidadCuotas) {
+        this.cantidadCuotas = cantidadCuotas;
     }
 
     public Credito getCredito() {
