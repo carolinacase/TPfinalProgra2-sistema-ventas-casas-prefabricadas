@@ -1,5 +1,6 @@
 package DAO;
 
+import Enumeradores.EstadoEmpleados;
 import Excepciones.DBConexionException;
 import Excepciones.DBCreationTableException;
 import Modelo.Administrativo;
@@ -45,7 +46,7 @@ public class ConexionEmpleados {
             ps.setString(4, e.getDomicilio());
             ps.setString(5, e.getCorreo());
             ps.setInt(6, e.getId());
-            ps.setBoolean(7, e.isActivo());
+            ps.setBoolean(7, e.getEstado().getValorEstado());
             ps.setDate(8, Date.valueOf(e.getFechaIngreso()));
             if(e instanceof Vendedor){
                 ps.setString(9, "VENDEDOR");
@@ -70,17 +71,18 @@ public class ConexionEmpleados {
             Statement ps = conexion.createStatement();
             ResultSet rs = ps.executeQuery(query);
             while (rs.next()){
+                EstadoEmpleados estado = rs.getBoolean("activo") ? EstadoEmpleados.ACTIVO : EstadoEmpleados.INACTIVO;
                 String tipo = rs.getString("tipo_empleado");
                 if(tipo.equals("VENDEDOR")){
                     e = new Vendedor(rs.getString("nombre"), rs.getString("apellido"),
                             rs.getString("dni"), rs.getString("domicilio"),
                             rs.getString("correo"), rs.getInt("id"),
-                            rs.getBoolean("activo"), rs.getDate("fecha_ingreso").toLocalDate());
+                            estado, rs.getDate("fecha_ingreso").toLocalDate());
                 }else if(tipo.equals("ADMINISTRATIVO")){
                     e = new Administrativo(rs.getString("nombre"), rs.getString("apellido"),
                             rs.getString("dni"), rs.getString("domicilio"),
                             rs.getString("correo"), rs.getInt("id"),
-                            rs.getBoolean("activo"), rs.getDate("fecha_ingreso").toLocalDate());
+                            estado, rs.getDate("fecha_ingreso").toLocalDate());
                 }else{
                     throw new SQLException("Tipo de empleado desconocido");
                 }
