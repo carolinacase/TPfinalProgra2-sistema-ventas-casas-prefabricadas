@@ -21,8 +21,8 @@ public abstract class Venta{
     private Vendedor vendedor;
     private Cotizacion cotizacion;
 
-    // 1. Constructor para NUEVAS ventas (el idVenta no se pide, se asigna solo con el AUTO_INCREMENT de la base de datos)
-    public Venta(LocalDate fechaSenia, double montoSenia, EstadoVenta estado, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion) {
+    // 1. Constructor para nuevas ventas (el idVenta no se pide, se asigna solo con el AUTO_INCREMENT de la base de datos)
+    public Venta(LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion) {
         this.idVenta = null;
         this.fechaSenia = fechaSenia;
         this.fechaVto = fechaSenia.plusDays(15);
@@ -30,7 +30,7 @@ public abstract class Venta{
         this.montoPagado = 0.0;
         this.precioTotal = cotizacion.calcularPrecio();
         this.historialDePagos = new ArrayList<>();
-        this.estado = estado;
+        this.estado = EstadoVenta.ACTIVA;
         this.cliente = cliente;
         this.vendedor = vendedor;
         this.cotizacion = cotizacion;
