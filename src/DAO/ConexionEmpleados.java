@@ -12,6 +12,9 @@ import java.util.Map;
 import java.sql.*;
 
 public class ConexionEmpleados {
+    // Se creó una instancia de tipo empleado ya que al ser abstracta,
+    // administrativo y vendedor heredaban de empleado
+    // Si no se logra crear la tabla, lanzamos un DBConexionException.
     public static void crearTabla() throws DBConexionException{
         try {
             Connection conexion = ConexionBD.obtenerConexion();
@@ -35,6 +38,7 @@ public class ConexionEmpleados {
         }
     }
 
+    // Si no se logra insertar un empleado, lanzamos una excepcion para capturar el error.
     public static void insertarEmpleado(Empleado e) throws DBCreationTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "INSERT INTO empleados VALUES(?,?,?,?,?,?,?,?,?)";
@@ -62,6 +66,11 @@ public class ConexionEmpleados {
     }
 
 
+    // Creamos un HashMap de tipo String y empleado llamado empleados para listar a los empleados.
+    // Si no se logra listar a los empleados, se lanza una excepcion.
+    // Para instanciar a los empleados, usamos ResultSet y el constructor de la clase Empleado.
+    // Para el estado del empleado y el tipo, creamos variables, uno de String para el tipo, y otro
+    // de tipo EstadoEmpleados.
     public static Map<String, Empleado> listarEmpleados() throws DBCreationTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * from empleados";

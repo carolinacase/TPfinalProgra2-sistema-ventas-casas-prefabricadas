@@ -47,6 +47,7 @@ public class Credito {
         this.servicioPresentado = servicioPresentado;
     }
 
+    // Para la documentación, retornamos el dni, el recibo de sueldo y el servicio que se va a presentar.
     public boolean documentacionCompleta(){
         return dniPresentado && reciboSueldoPresentado && servicioPresentado;
     }

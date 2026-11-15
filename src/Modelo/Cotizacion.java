@@ -78,6 +78,9 @@ public class Cotizacion {
         return VALOR_PLATEA_M2;
     }
 
+    // Calculamos el precio con los m2 y el valor de la platea en m2.
+    // Si el modelo de la casa incluye platea, retornamos una suma
+    // entre el precio y una multiplicación entre los metros cuadrados y su valor de platea por m2.
     public double calcularPrecio(){
 
         double precio = this.m2 * this.modeloCasa.getValorM2();
