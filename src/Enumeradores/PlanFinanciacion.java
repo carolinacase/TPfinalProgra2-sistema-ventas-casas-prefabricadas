@@ -1,12 +1,12 @@
 package Enumeradores;
 
 public enum PlanFinanciacion {
-    PRIMER_ANIO(12),
-    SEGUNDO_ANIO(24),
-    TERCER_ANIO(36),
-    CUARTO_ANIO(48),
-    QUINTO_ANIO(60),
-    SEXTO_ANIO(72);
+    UN_ANIO(12),
+    DOS_ANIOS(24),
+    TRES_ANIOS(36),
+    CUATRO_ANIOS(48),
+    CINCO_ANIOS(60),
+    SEIS_ANIOS(72);
 
 
     private static final double TASA_MENSUAL = 0.02;
@@ -30,5 +30,21 @@ public enum PlanFinanciacion {
 
         return totalConInteres / cuota;
 
+    }
+
+    public static PlanFinanciacion obtenerPorCuotas(int cantidadCuotas) {
+
+        for (PlanFinanciacion plan : PlanFinanciacion.values()) {
+
+            if (plan.getCuota() == cantidadCuotas) {
+
+                return plan;
+
+            }
+
+        }
+
+        return null;
+        //throw new IllegalArgumentException("Cantidad de cuotas no válida: " + cantidadCuotas);
     }
 }

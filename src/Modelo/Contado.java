@@ -8,10 +8,11 @@ import java.time.LocalDate;
 public class Contado extends Venta{
     private PlanContado modalidad;
 
-    public Contado(int idVenta, LocalDate fechaSenia, double montoSenia, EstadoVenta estado, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, PlanContado modalidad) {
-        super(idVenta, fechaSenia, montoSenia, estado, cliente, vendedor, cotizacion);
+    public Contado(LocalDate fechaSenia, double montoSenia, Cliente cliente, Vendedor vendedor, Cotizacion cotizacion, PlanContado modalidad) {
+        super(fechaSenia, montoSenia, cliente, vendedor, cotizacion);
         this.modalidad = modalidad;
     }
+
 
     public PlanContado getModalidad() {
         return modalidad;

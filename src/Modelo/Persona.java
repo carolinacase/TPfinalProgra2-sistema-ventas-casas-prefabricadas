@@ -66,8 +66,7 @@ public abstract class Persona implements IIdUnico {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Persona persona = (Persona) o;
+        if (!(o instanceof Persona persona)) return false;
         return Objects.equals(dni, persona.dni);
     }
 
