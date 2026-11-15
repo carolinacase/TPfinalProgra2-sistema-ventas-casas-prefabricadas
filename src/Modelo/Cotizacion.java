@@ -15,10 +15,13 @@ public class Cotizacion {
     private ModeloCasa modeloCasa;
     private double m2;
     private IncluyePlatea incluyePlatea;
-    private static final double VALOR_PLATEA_M2 = 65000;
+    private static final double VALOR_PLATEA_M2 = 65000; //precio de la platea por m2
+    private static final double MARGEN_PLATEA = 0.10; // la platea sobresale 20-30 cm alrededor de la casa: se suma un 10% a los m2
+    private static int contadorCotizaciones = 0; // General el id, y no se guarda ya que las cotizaciones que no son ventas no es necesario guardar
 
     public Cotizacion(MedioContacto medioContacto, ModeloCasa modeloCasa, double m2, IncluyePlatea incluyePlatea) {
-        this.id = null;
+        contadorCotizaciones++;               // suma 1 al contador
+        this.id = contadorCotizaciones;       // esta cotización se queda con ese número
         this.fecha = LocalDate.now();
         this.medioContacto = medioContacto;
         this.modeloCasa = modeloCasa;
@@ -78,17 +81,16 @@ public class Cotizacion {
         return VALOR_PLATEA_M2;
     }
 
-    // Calculamos el precio con los m2 y el valor de la platea en m2.
-    // Si el modelo de la casa incluye platea, retornamos una suma
-    // entre el precio y una multiplicación entre los metros cuadrados y su valor de platea por m2.
+    /// Precio = m2 de la casa x valor del modelo. Si lleva platea, se suma la platea: m2 de la casa + 10%, x valor de la platea por m2.
     public double calcularPrecio(){
 
         double precio = this.m2 * this.modeloCasa.getValorM2();
 
         if(incluyePlatea.getIncluye()){
 
-            return precio + (this.m2 * VALOR_PLATEA_M2);
+            double m2Platea = this.m2 * (1 + MARGEN_PLATEA);   // m2 de la casa + 10%
 
+            return precio + (m2Platea * VALOR_PLATEA_M2);
         }
 
         return precio;
@@ -107,13 +109,11 @@ public class Cotizacion {
 
     @Override
     public String toString() {
-        return "Cotizacion{" +
-                "id=" + id +
+        return "Cotización nº " + id +
                 ", fecha=" + fecha +
                 ", medioContacto=" + medioContacto +
                 ", modeloCasa=" + modeloCasa +
                 ", m2=" + m2 +
-                ", incluyePlatea=" + incluyePlatea +
-                '}';
+                ", incluyePlatea=" + incluyePlatea;
     }
 }
