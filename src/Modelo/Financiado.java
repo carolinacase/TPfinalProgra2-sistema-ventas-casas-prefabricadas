@@ -31,6 +31,7 @@ public class Financiado extends Venta{
         return credito;
     }
 
+    // Multiplicamos por el precio de la cotizacion y el primer anticipo
     public double calcularAnticipo(){
         anticipo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
 
@@ -38,6 +39,8 @@ public class Financiado extends Venta{
 
     }
 
+    // Hacemos lo mismo para validar el anticipo
+    // Por otro lado, si el anticipo es menor al minimo, lanzamos un mensaje con AnticipoInsuficienteException
     public void validarAnticipo() throws AnticipoInsuficienteException {
 
         double minimo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
@@ -55,6 +58,7 @@ public class Financiado extends Venta{
                 ", credito: " + credito + ')';
     }
 
+    // Para calcular el saldo, restamos por el precio total, el monto de la seña, su anticipo y su monto pagado.
     @Override
     public double calcularSaldo() {
         return getPrecioTotal() - getMontoSenia() - anticipo - getMontoPagado();

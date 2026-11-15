@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConexionClientes {
+    // Creamos la tabla de clientes, con su dni como primary key
+    // Si no se logra crear la tabla, lanzamos una excepcion
     public static void crearTablaCliente()throws DBConexionException{
         try{
             Connection conexion = ConexionBD.obtenerConexion();
@@ -28,6 +30,8 @@ public class ConexionClientes {
             ConexionBD.cerrarConexion();
         }
     }
+
+    // Si no se logra insertar un cliente, lanzamos también una excepcion
     public static void insertarCliente(Cliente c) throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "INSERT INTO clientes VALUES (?,?,?,?,?);";
@@ -46,6 +50,10 @@ public class ConexionClientes {
             ConexionBD.cerrarConexion();
         }
     }
+
+    // Creamos un Map de tipo String para el dni (siendo su clave) y de tipo Cliente (siendo su valor)
+    // Si no se logra obtener al cliente, lanzamos una excepcion
+    // Por otro lado, agregamos el objeto de tipo cliente al Map y por último retornamos el Map.
     public static Map<String, Cliente> obtenerClientes() throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * FROM clientes";
