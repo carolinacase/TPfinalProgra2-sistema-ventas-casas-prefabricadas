@@ -3,6 +3,7 @@ package Gestora;
 import DAO.ConexionClientes;
 import DAO.ConexionVentas;
 import Enumeradores.*;
+import Excepciones.AnticipoInsuficienteException;
 import Excepciones.DBConexionException;
 import Excepciones.DBCreateTableException;
 import Excepciones.DocumentacionIncompletaException;
@@ -55,29 +56,27 @@ public class Empresa {
                                 if(tipoVenta.equalsIgnoreCase("Contado")){
 
                                     Contado vc = ingresarVentaContado();
-
-                                    //ventas.agregar(, vc); //Falta traer el id de la BD
+                                    guardarVenta(vc);
 
                                 } else if (tipoVenta.equalsIgnoreCase("Financiado")) {
 
                                     Financiado vf = ingresarVentaFinanciado();
-                                    Administrativo administrativo = elegirAdministrativo();
 
                                     try{
+                                        vf.validarAnticipo();          // el anticipo tiene que ser al menos el 30% del precio
 
+                                        Administrativo administrativo = elegirAdministrativo();
                                         administrativo.aprobarCredito(vf);
-
-                                        //ventas.agregar(, vf)//Falta traer el id de la BD
-
-
+                                        guardarVenta(vf);
+                                    }catch (AnticipoInsuficienteException e){
+                                        System.out.println(e.getMessage());   // muestra el anticipo minimo
                                     }catch (DocumentacionIncompletaException e){
-
                                         System.out.println(e.getMessage());
-
                                     }
                                 }
 
                                 break;
+
                             case 2:
                                 System.out.println("Ingrese el id de la venta a eliminar: ");
                                 int idEliminar = sc.nextInt();
@@ -185,7 +184,6 @@ public class Empresa {
         PlanContado plan = elegirPlanContado();
 
         Contado contado = new Contado(fechaDeHoy, montoSenia, cliente, vendedor, cotizacion, plan);
-        mostrarVenta(contado);
 
         return contado;
 
@@ -400,21 +398,15 @@ public class Empresa {
         IncluyePlatea platea = null;
 
         do {
-            System.out.println("La venta incluye platea?");
-            System.out.println("1. Si");
-            System.out.println("2. No");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            System.out.println("La venta incluye platea? (Si/No)");
+            String respuesta = sc.nextLine().trim();   // trim saca espacios de más
 
-            switch (opcion) {
-                case 1:
-                    platea = IncluyePlatea.SI;
-                    break;
-                case 2:
-                    platea = IncluyePlatea.NO;
-                    break;
-                default:
-                    System.out.println("Opción invalida, intente de nuevo");
+            if (respuesta.equalsIgnoreCase("si") || respuesta.equalsIgnoreCase("sí")) {   // acepta si, Si, SI y con tilde
+                platea = IncluyePlatea.SI;
+            } else if (respuesta.equalsIgnoreCase("no")) {
+                platea = IncluyePlatea.NO;
+            } else {
+                System.out.println("Respuesta inválida, escriba Si o No");
             }
         } while (platea == null);
 
@@ -425,21 +417,15 @@ public class Empresa {
         SiNo respuesta = null;
 
         do {
-            System.out.println(pregunta);
-            System.out.println("1. Sí");
-            System.out.println("2. No");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            System.out.println(pregunta + " (Si/No)");
+            String texto = sc.nextLine().trim();   // trim saca espacios de más
 
-            switch (opcion) {
-                case 1:
-                    respuesta = SiNo.SI;
-                    break;
-                case 2:
-                    respuesta = SiNo.NO;
-                    break;
-                default:
-                    System.out.println("Opción inválida, intente de nuevo");
+            if (texto.equalsIgnoreCase("si") || texto.equalsIgnoreCase("sí")) {   // acepta si, Si, SI y con tilde
+                respuesta = SiNo.SI;
+            } else if (texto.equalsIgnoreCase("no")) {
+                respuesta = SiNo.NO;
+            } else {
+                System.out.println("Respuesta inválida, escriba Si o No");
             }
         } while (respuesta == null);
 
@@ -496,6 +482,19 @@ public class Empresa {
         System.out.println("Precio total: $" + v.getPrecioTotal());
         System.out.println("Seña: $" + v.getMontoSenia());
         System.out.println("Saldo: $" + v.calcularSaldo());
+    }
+    // Guarda la venta completa: primero el cliente (si es nuevo) y después la venta
+    private void guardarVenta(Venta v) {
+        try {
+            clientes.registrarCliente(v.getCliente());
+            ventas.registrarVenta(v);
+            System.out.println("Venta cargada correctamente");
+            mostrarVenta(v);
+        } catch (DBConexionException e) {
+            System.out.println("Error de conexión: " + e.getMessage());
+        } catch (DBCreateTableException e) {
+            System.out.println("No se pudo guardar la venta: " + e.getMessage());
+        }
     }
 
 }

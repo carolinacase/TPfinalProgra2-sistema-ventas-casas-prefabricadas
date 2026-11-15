@@ -1,5 +1,8 @@
 package Gestora;
 
+import DAO.ConexionClientes;
+import Excepciones.DBConexionException;
+import Excepciones.DBCreateTableException;
 import Modelo.Cliente;
 
 import java.util.Scanner;
@@ -56,6 +59,14 @@ public class GestoraClientes extends GestoraGenerica<Cliente, String> {
         }while (opcion != 0);
     }
 
+    // Si el cliente no existe todavía, lo guarda en MySQL y en la gestora.
+    // Si ya existe (por ejemplo, compra su segunda casa), no hace nada.
+    public void registrarCliente(Cliente c) throws DBConexionException, DBCreateTableException {
+        if (buscar(c.getDni()) == null) {
+            ConexionClientes.insertarCliente(c);
+            agregar(c.getDni(), c);
+        }
+    }
 
     public Cliente buscarCliente(String dni){
 
