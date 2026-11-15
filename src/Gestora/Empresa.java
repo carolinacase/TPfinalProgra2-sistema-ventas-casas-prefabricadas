@@ -9,6 +9,8 @@ import Excepciones.DocumentacionIncompletaException;
 import Modelo.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -227,24 +229,31 @@ public class Empresa {
 
     private Vendedor elegirVendedor(){
 
-        Vendedor vendedorElegido = null;
-
-        System.out.println("Ingrese el nombre del vendedor: ");
-        String nombreVendedor = sc.nextLine();
-
+        List<Vendedor> listaVendedores = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
         for(Empleado emp : empleados.listarEmpleadosActivos()){
 
-            if(emp.getNombre().equals(nombreVendedor)){
+            if(emp instanceof Vendedor){
 
-                vendedorElegido = (Vendedor) emp;
+                listaVendedores.add((Vendedor) emp);
 
-                break;
             }
+        }
+
+        for(int i = 0; i < listaVendedores.size(); i++){
+
+            sb.append(i + 1).append(". ").append(listaVendedores.get(i).getNombre()).append("\n");
 
         }
 
-        return vendedorElegido;
+        System.out.println(sb);
+
+        System.out.println("Ingrese el indice del vendedor que elige: ");
+        int indiceVendedorElegido = sc.nextInt();
+        sc.nextLine();
+
+        return listaVendedores.get(indiceVendedorElegido - 1);
     }
 
     private Financiado ingresarVentaFinanciado(){
@@ -305,6 +314,7 @@ public class Empresa {
 
         return administrativoElegido;
     }
+
     private PlanContado elegirPlanContado() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
         PlanContado plan = null;
 
