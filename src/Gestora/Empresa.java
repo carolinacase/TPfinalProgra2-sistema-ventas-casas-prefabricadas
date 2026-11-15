@@ -132,6 +132,7 @@ public class Empresa {
             }
         }while (opcionPrincipal != 0);
     }
+
     private void cargarBaseDeDatos() {
         try {
             ConexionClientes.crearTablaCliente();   // primero creo bdd clientes
@@ -184,6 +185,7 @@ public class Empresa {
         PlanContado plan = elegirPlanContado();
 
         Contado contado = new Contado(fechaDeHoy, montoSenia, cliente, vendedor, cotizacion, plan);
+        mostrarVenta(contado);
 
         return contado;
 
@@ -269,13 +271,14 @@ public class Empresa {
 
         Credito credito = ingresarCredito();
 
+
         return new Financiado(fechaDeHoy, montoSenia, cliente, vendedor, cotizacion, anticipo,  planElegido, credito);
 
     }
 
     private Credito ingresarCredito() {
 
-        SiNo dniCredito = elegirSiNo("¿Presentó el DNI?");
+        SiNo dniCredito = elegirSiNo("Presentó el DNI?");
 
         SiNo reciboCredito = elegirSiNo("Presentó el recibo de sueldo?");
 
@@ -305,6 +308,7 @@ public class Empresa {
 
         return administrativoElegido;
     }
+
     private PlanContado elegirPlanContado() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
         PlanContado plan = null;
 
@@ -340,7 +344,7 @@ public class Empresa {
         do {
             System.out.println("Elija el medio de contacto:");
             System.out.println("1. Redes");
-            System.out.println("2. Teléfono");
+            System.out.println("2. Telefono");
             System.out.println("3. Presencial");
             int opcion = sc.nextInt();
             sc.nextLine();
@@ -482,7 +486,17 @@ public class Empresa {
 
         return plan;
     }
+    // Muestra por pantalla los datos de la venta
 
+    private void mostrarVenta(Venta v) {
+        System.out.println("===== VENTA =====");
+        System.out.println("Cliente: " + v.getCliente().getNombreCompleto() + " (DNI " + v.getCliente().getDni() + ")");
+        System.out.println("Modelo: " + v.getCotizacion().getModeloCasa() + " - " + v.getCotizacion().getM2() + " m2");
+        System.out.println("Incluye platea: " + v.getCotizacion().getIncluyePlatea());
+        System.out.println("Precio total: $" + v.getPrecioTotal());
+        System.out.println("Seña: $" + v.getMontoSenia());
+        System.out.println("Saldo: $" + v.calcularSaldo());
+    }
 
 }
 
