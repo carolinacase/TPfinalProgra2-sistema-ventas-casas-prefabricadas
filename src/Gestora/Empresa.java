@@ -1,13 +1,9 @@
 package Gestora;
 
-import Enumeradores.IncluyePlatea;
-import Enumeradores.MedioContacto;
-import Enumeradores.ModeloCasa;
-import Enumeradores.PlanContado;
+import Enumeradores.*;
 import Modelo.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Scanner;
 
 public class Empresa {
@@ -25,14 +21,14 @@ public class Empresa {
     }
 
     public void consultarEmpresa(){
-        int opcion;
+        int opcionPrincipal;
 
         do{
             menuPrincipal();
-            opcion = sc.nextInt();
+            opcionPrincipal = sc.nextInt();
             sc.nextLine();
 
-            switch(opcion){
+            switch(opcionPrincipal){
                 case 1:
                     int opcionVentas;
 
@@ -50,16 +46,46 @@ public class Empresa {
 
                                     Contado newContado = ingresarVentaContado();
 
-                                    ventas.agregar(, newContado);
+                                    //ventas.agregar(, newContado); //Falta traer el id de la BD
 
                                 } else if (tipoVenta.equalsIgnoreCase("Financiado")) {
 
-
+                                    //Falta implementar ingresarVentaFinanciado
 
                                 }
 
                                 break;
                             case 2:
+                                System.out.println("Ingrese el id de la venta a eliminar: ");
+                                int idEliminar = sc.nextInt();
+                                sc.nextLine();
+
+                                System.out.println(ventas.eliminar(idEliminar) ? "Venta eliminada con exito" : "Venta no se pudo eliminar");
+
+                                break;
+                            case 3:
+
+                                ventas.listar();
+
+                                break;
+                            case 4:
+                                System.out.println("Ingrese el id de la venta a actualizar: ");
+                                int idActualizar = sc.nextInt();
+                                sc.nextLine();
+
+                                Venta ventaBuscada =  ventas.buscar(idActualizar);
+
+                                ventas.actualizar(ventaBuscada);
+
+                                break;
+                            case 5:
+
+                                for(Pago pg : ventas.verificarPagosDeHoy()){
+
+                                    System.out.println(pg);
+
+                                }
+
                                 break;
                             case 0:
                                 System.out.println("Saliendo del menú de ventas...");
@@ -81,7 +107,7 @@ public class Empresa {
                 default:
                     System.out.println("Opción inválida");
             }
-        }while (opcion != 0);
+        }while (opcionPrincipal != 0);
     }
 
     private void menuPrincipal(){
@@ -103,18 +129,7 @@ public class Empresa {
         System.out.println("0. Salir");
     }
 
-    private void menuActualizarVenta(){
-        System.out.println("==========MENU ACTUALIZAR==========");
-        System.out.println("Que campo desea modificar?");
-        System.out.println( "1. Monto del anticipo\n" +
-                            "2. Estado venta\n" +
-                            "3. Modelo de la casa\n" +
-                            "0. Salir del menu");
-    }
-
     private Contado ingresarVentaContado(){
-
-        Scanner sc = new Scanner(System.in);
 
         LocalDate fechaDeHoy = LocalDate.now();
 
@@ -139,8 +154,6 @@ public class Empresa {
 
     private Cliente ingresarCliente(){
 
-        Scanner sc = new Scanner(System.in);
-
         System.out.println("Ingrese el nombre del cliente: ");
         String nombreCliente = sc.nextLine();
 
@@ -160,7 +173,6 @@ public class Empresa {
     }
 
     private Cotizacion ingresarCotizacion(){
-        Scanner sc = new Scanner(System.in);
 
         System.out.println("Ingrese el medio de contacto (Redes/ Telefono/ Presencial): ");
         String medioContacto = sc.nextLine();
@@ -203,7 +215,6 @@ public class Empresa {
     }
 
     private Financiado ingresarVentaFinanciado(){
-        Scanner sc = new Scanner(System.in);
 
         LocalDate fechaDeHoy = LocalDate.now();
 
@@ -225,14 +236,26 @@ public class Empresa {
         int plan = sc.nextInt();
         sc.nextLine();
 
+        return null;
+
+    }//Falta terminar
+
+    private Credito ingresarCredito() {
+
+        System.out.println("Presento el dni? (Si/No)");
+        String dniCredito = sc.nextLine();
+
+        System.out.println("Presento el recibo de sueldo (Si/No): ");
+        String reciboCredito = sc.nextLine();
+
+        System.out.println("Presento el algun servicio (Sin/No): ");
+        String servicioCredito = sc.nextLine();
+
+
+        return new Credito(SiNo.valueOf(dniCredito.toUpperCase()), SiNo.valueOf(reciboCredito.toUpperCase()), SiNo.valueOf(servicioCredito.toUpperCase()));
+
     }
 
-    private Credito ingresarCredito(){
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Tiene el dni presentado?");
-
-    }
 
 }
 
