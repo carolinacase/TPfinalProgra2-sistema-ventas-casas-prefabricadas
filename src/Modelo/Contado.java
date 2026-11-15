@@ -22,10 +22,12 @@ public class Contado extends Venta{
         this.modalidad = modalidad;
     }
 
+    // Restamos por el precio total, monto de la seña y el monto a pagar para obtener el saldo.
     @Override
     public double calcularSaldo() {
         return getPrecioTotal() - getMontoSenia() - getMontoPagado();
     }
+
 
 
 }

@@ -130,6 +130,7 @@ public abstract class Venta{
 
     public abstract double calcularSaldo();
 
+    // 1. Acá validamos la venta. Para ello, hemos creado VentaInvalidaException.
     public void validar() throws VentaInvalidaException {
             if (cliente == null) {
                 throw new VentaInvalidaException("La venta no tiene cliente asignado");
@@ -143,6 +144,9 @@ public abstract class Venta{
 
     }
 
+    // 2. Luego registramos el pago, con su fecha y monto.
+    // 3. Usamos el historial de pagos para añadir un objeto de tipo Pago
+    // 4. Finalmente, sumamos el monto pagado con su monto.
     public void registrarPago(LocalDate fecha, double monto){
 
         Pago nuevoPago = new Pago(fecha, monto);
