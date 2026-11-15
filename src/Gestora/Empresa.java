@@ -181,10 +181,9 @@ public class Empresa {
 
         Cotizacion cotizacion = ingresarCotizacion();
 
-        System.out.println("Ingrese su plan de contado (Pago total/ Plan 6/ Plan 12): ");
-        String planContado = sc.nextLine();
+        PlanContado plan = elegirPlanContado();
 
-        Contado contado = new Contado(fechaDeHoy, montoSenia, cliente, vendedor, cotizacion, PlanContado.valueOf(planContado));
+        Contado contado = new Contado(fechaDeHoy, montoSenia, cliente, vendedor, cotizacion, plan);
 
         return contado;
 
@@ -317,6 +316,34 @@ public class Empresa {
         }
 
         return administrativoElegido;
+    }
+    private PlanContado elegirPlanContado() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
+        PlanContado plan = null;
+
+        do {
+            System.out.println("Elija el plan de contado:");
+            System.out.println("1. Pago total");
+            System.out.println("2. Plan 6 cuotas");
+            System.out.println("3. Plan 12 cuotas");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    plan = PlanContado.PAGO_TOTAL;
+                    break;
+                case 2:
+                    plan = PlanContado.PLAN_6;
+                    break;
+                case 3:
+                    plan = PlanContado.PLAN_12;
+                    break;
+                default:
+                    System.out.println("Opción inválida, intente de nuevo");
+            }
+        } while (plan == null);
+
+        return plan;
     }
 
 
