@@ -1,10 +1,15 @@
 package Gestora;
 
+import DAO.ConexionClientes;
+import DAO.ConexionVentas;
 import Enumeradores.*;
+import Excepciones.DBConexionException;
+import Excepciones.DBCreateTableException;
 import Modelo.*;
 
 import java.time.LocalDate;
 import java.util.Scanner;
+
 
 public class Empresa {
     private String nombre;
@@ -21,6 +26,9 @@ public class Empresa {
     }
 
     public void consultarEmpresa(){
+        cargarBaseDeDatos();   // prepara tablas y trae los clientes antes de mostrar el menú
+
+
         int opcionPrincipal;
 
         do{
@@ -39,7 +47,8 @@ public class Empresa {
 
                         switch(opcionVentas){
                             case 1:
-                                System.out.println("Que tipo de venta va a ser (Contado/Financiado)?: ");
+                                System.out.println("Carga de Venta: ");
+                                System.out.println("Ingrese tipo de venta -> Contado/Financiado ");
                                 String tipoVenta = sc.nextLine();
 
                                 if(tipoVenta.equalsIgnoreCase("Contado")){
@@ -108,6 +117,21 @@ public class Empresa {
                     System.out.println("Opción inválida");
             }
         }while (opcionPrincipal != 0);
+    }
+    private void cargarBaseDeDatos() {
+        try {
+            ConexionClientes.crearTablaCliente();   // primero creo bdd clientes
+            ConexionVentas.crearTablaVentas();      // después bdd ventas, porque depende de clientes
+
+            // trae de MySQL los clientes guardados y los carga en la gestora
+            for (Cliente c : ConexionClientes.obtenerClientes().values()) {
+                clientes.agregar(c.getDni(), c);
+            }
+        } catch (DBConexionException e) {
+            System.out.println("Error de conexión: " + e.getMessage());
+        } catch (DBCreateTableException e) {
+            System.out.println("Error al leer los datos: " + e.getMessage());
+        }
     }
 
     private void menuPrincipal(){
