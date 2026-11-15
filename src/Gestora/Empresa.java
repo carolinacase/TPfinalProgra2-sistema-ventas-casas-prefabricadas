@@ -209,23 +209,19 @@ public class Empresa {
         return new Cliente(nombreCliente, apellidoCliente, dniCliente, domicilioCliente,correoCliente);
     }
 
-    private Cotizacion ingresarCotizacion(){
+    private Cotizacion ingresarCotizacion(){ //LA COTIZACION SE CALCULA EN BASE A LOS M2 COMPRADOS Y SI SE ADQUIERE O NO PLATEA, LA CUAL LLEVARIA LA MISMA SUPERFICIE
 
-        System.out.println("Ingrese el medio de contacto (Redes/ Telefono/ Presencial): ");
-        String medioContacto = sc.nextLine();
+        MedioContacto medio = elegirMedioContacto();
 
-        System.out.println("Ingrese el modelo de la casa (Basico/ Estanar/ Premium): ");
-        String modeloCasa = sc.nextLine();
+        ModeloCasa modelo = elegirModeloCasa();
 
-        System.out.println("Ingrese los metros cuadrados del terreno: ");
-        double m2Terreno = sc.nextDouble();
+        System.out.println("Ingrese los metros cuadrados de la casa: ");
+        double m2Casa = sc.nextDouble();
         sc.nextLine();
 
-        System.out.println("El terreno incluye platea (Si/No)?: ");
-        String platea = sc.nextLine();
+        IncluyePlatea platea = elegirIncluyePlatea();
 
-        return new Cotizacion(MedioContacto.valueOf(medioContacto), ModeloCasa.valueOf(modeloCasa),
-                                m2Terreno, IncluyePlatea.valueOf(platea));
+        return new Cotizacion(medio, modelo, m2Casa, platea);
 
     }
 
@@ -269,11 +265,7 @@ public class Empresa {
         double anticipo =  sc.nextDouble();
         sc.nextLine();
 
-        System.out.println("Ingrese el plan de financiacion (12 / 24 / 36 / 48 / 60 / 72): ");
-        int plan = sc.nextInt();
-        sc.nextLine();
-
-        PlanFinanciacion planElegido = PlanFinanciacion.obtenerPorCuotas(plan);
+        PlanFinanciacion planElegido = elegirPlanFinanciacion();
 
         Credito credito = ingresarCredito();
 
@@ -283,17 +275,13 @@ public class Empresa {
 
     private Credito ingresarCredito() {
 
-        System.out.println("Presento el dni? (Si/No)");
-        String dniCredito = sc.nextLine();
+        SiNo dniCredito = elegirSiNo("¿Presentó el DNI?");
 
-        System.out.println("Presento el recibo de sueldo (Si/No): ");
-        String reciboCredito = sc.nextLine();
+        SiNo reciboCredito = elegirSiNo("Presentó el recibo de sueldo?");
 
-        System.out.println("Presento el algun servicio (Si/No): ");
-        String servicioCredito = sc.nextLine();
+        SiNo servicioCredito = elegirSiNo("Presentó algún servicio?");
 
-
-        return new Credito(SiNo.valueOf(dniCredito.toUpperCase()), SiNo.valueOf(reciboCredito.toUpperCase()), SiNo.valueOf(servicioCredito.toUpperCase()));
+        return new Credito(dniCredito, reciboCredito, servicioCredito);
 
     }
 
@@ -339,7 +327,156 @@ public class Empresa {
                     plan = PlanContado.PLAN_12;
                     break;
                 default:
+                    System.out.println("Opcion invalida, intente de nuevo");
+            }
+        } while (plan == null);
+
+        return plan;
+    }
+
+    private MedioContacto elegirMedioContacto() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
+        MedioContacto medio = null;
+
+        do {
+            System.out.println("Elija el medio de contacto:");
+            System.out.println("1. Redes");
+            System.out.println("2. Teléfono");
+            System.out.println("3. Presencial");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    medio = MedioContacto.REDES;
+                    break;
+                case 2:
+                    medio = MedioContacto.TELEFONO;
+                    break;
+                case 3:
+                    medio = MedioContacto.PRESENCIAL;
+                    break;
+                default:
+                    System.out.println("Opción invalida, intente de nuevo");
+            }
+        } while (medio == null);
+
+        return medio;
+    }
+
+    private ModeloCasa elegirModeloCasa() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
+        ModeloCasa modelo = null;
+
+        do {
+            System.out.println("Elija el modelo de la casa:");
+            System.out.println("1. Basico");
+            System.out.println("2. Estandar");
+            System.out.println("3. Premium");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    modelo = ModeloCasa.BASICO;
+                    break;
+                case 2:
+                    modelo = ModeloCasa.ESTANDAR;
+                    break;
+                case 3:
+                    modelo = ModeloCasa.PREMIUM;
+                    break;
+                default:
                     System.out.println("Opción inválida, intente de nuevo");
+            }
+        } while (modelo == null);
+
+        return modelo;
+    }
+
+    private IncluyePlatea elegirIncluyePlatea() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
+        IncluyePlatea platea = null;
+
+        do {
+            System.out.println("La venta incluye platea?");
+            System.out.println("1. Si");
+            System.out.println("2. No");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    platea = IncluyePlatea.SI;
+                    break;
+                case 2:
+                    platea = IncluyePlatea.NO;
+                    break;
+                default:
+                    System.out.println("Opción invalida, intente de nuevo");
+            }
+        } while (platea == null);
+
+        return platea;
+    }
+
+    private SiNo elegirSiNo(String pregunta) {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
+        SiNo respuesta = null;
+
+        do {
+            System.out.println(pregunta);
+            System.out.println("1. Sí");
+            System.out.println("2. No");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    respuesta = SiNo.SI;
+                    break;
+                case 2:
+                    respuesta = SiNo.NO;
+                    break;
+                default:
+                    System.out.println("Opción inválida, intente de nuevo");
+            }
+        } while (respuesta == null);
+
+        return respuesta;
+    }
+
+    private PlanFinanciacion elegirPlanFinanciacion() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
+        PlanFinanciacion plan = null;
+
+        do {
+            System.out.println("Elija el plan de financiación:");
+            System.out.println("1. 12 cuotas (1 año)");
+            System.out.println("2. 24 cuotas (2 años)");
+            System.out.println("3. 36 cuotas (3 años)");
+            System.out.println("4. 48 cuotas (4 años)");
+            System.out.println("5. 60 cuotas (5 años)");
+            System.out.println("6. 72 cuotas (6 años)");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    plan = PlanFinanciacion.UN_ANIO;
+                    break;
+                case 2:
+                    plan = PlanFinanciacion.DOS_ANIOS;
+                    break;
+                case 3:
+                    plan = PlanFinanciacion.TRES_ANIOS;
+                    break;
+                case 4:
+                    plan = PlanFinanciacion.CUATRO_ANIOS;
+                    break;
+                case 5:
+                    plan = PlanFinanciacion.CINCO_ANIOS;
+                    break;
+                case 6:
+                    plan = PlanFinanciacion.SEIS_ANIOS;
+                    break;
+                default:
+                    System.out.println("Opcion invalida, intente de nuevo");
             }
         } while (plan == null);
 
