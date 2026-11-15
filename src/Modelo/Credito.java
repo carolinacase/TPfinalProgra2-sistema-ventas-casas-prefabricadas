@@ -8,12 +8,13 @@ public class Credito {
     private boolean servicioPresentado;
     private boolean aprobado;
 
-    public Credito(boolean dniPresentado, boolean reciboSueldoPresentado, boolean servicioPresentado, boolean aprobado) {
+    public Credito(boolean dniPresentado, boolean reciboSueldoPresentado, boolean servicioPresentado) {
         this.dniPresentado = dniPresentado;
         this.reciboSueldoPresentado = reciboSueldoPresentado;
         this.servicioPresentado = servicioPresentado;
         this.aprobado = false;
     }
+
 
     public boolean isAprobado() {
         return aprobado;
