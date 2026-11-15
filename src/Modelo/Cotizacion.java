@@ -1,5 +1,6 @@
 package Modelo;
 
+import Enumeradores.IncluyePlatea;
 import Enumeradores.MedioContacto;
 import Enumeradores.ModeloCasa;
 
@@ -8,18 +9,17 @@ import java.util.Objects;
 
 public class Cotizacion {
 
-    private int id;
+    private Integer id;
     private LocalDate fecha;
     private MedioContacto medioContacto;
     private ModeloCasa modeloCasa;
     private double m2;
-    private boolean incluyePlatea;
+    private IncluyePlatea incluyePlatea;
     private static final double VALOR_PLATEA_M2 = 65000;
 
-    public Cotizacion(int id, LocalDate fecha,
-                      MedioContacto medioContacto, ModeloCasa modeloCasa, double m2, boolean incluyePlatea) {
-        this.id = id;
-        this.fecha = fecha;
+    public Cotizacion(MedioContacto medioContacto, ModeloCasa modeloCasa, double m2, IncluyePlatea incluyePlatea) {
+        this.id = null;
+        this.fecha = LocalDate.now();
         this.medioContacto = medioContacto;
         this.modeloCasa = modeloCasa;
         this.m2 = m2;
@@ -66,11 +66,11 @@ public class Cotizacion {
         this.m2 = m2;
     }
 
-    public boolean isIncluyePlatea() {
+    public IncluyePlatea getIncluyePlatea() {
         return incluyePlatea;
     }
 
-    public void setIncluyePlatea(boolean incluyePlatea) {
+    public void setIncluyePlatea(IncluyePlatea incluyePlatea) {
         this.incluyePlatea = incluyePlatea;
     }
 
@@ -82,7 +82,7 @@ public class Cotizacion {
 
         double precio = this.m2 * this.modeloCasa.getValorM2();
 
-        if(incluyePlatea){
+        if(incluyePlatea.getIncluye()){
 
             return precio + (this.m2 * VALOR_PLATEA_M2);
 
