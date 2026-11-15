@@ -1,7 +1,7 @@
 package DAO;
 
 import Excepciones.DBConexionException;
-import Excepciones.DBCreationTableException;
+import Excepciones.DBCreatTableException;
 import Modelo.Cliente;
 
 import java.sql.*;
@@ -29,7 +29,7 @@ public class ConexionClientes {
             ConexionBD.cerrarConexion();
         }
     }
-    public static void insertarCliente(Cliente c) throws DBCreationTableException, DBConexionException {
+    public static void insertarCliente(Cliente c) throws DBCreatTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "INSERT INTO clientes VALUES (?,?,?,?,?,?);";
 
@@ -42,12 +42,12 @@ public class ConexionClientes {
             ps.setString(5,c.getCorreo());
             ps.executeUpdate();
         }catch(SQLException e){
-            throw new DBCreationTableException("No se pudo insertar el cliente");
+            throw new DBCreatTableException("No se pudo insertar el cliente");
         }finally {
             ConexionBD.cerrarConexion();
         }
     }
-    public static Map<Integer, Cliente> obtenerClientes() throws DBCreationTableException, DBConexionException, SQLException {
+    public static Map<Integer, Cliente> obtenerClientes() throws DBCreatTableException, DBConexionException, SQLException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * FROM clientes";
         Map<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
@@ -62,7 +62,7 @@ public class ConexionClientes {
             }
 
         }catch (SQLException e){
-            throw new DBCreationTableException("No se pudo obtener el cliente");
+            throw new DBCreatTableException("No se pudo obtener el cliente");
         }
         finally{
             ConexionBD.cerrarConexion();

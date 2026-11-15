@@ -2,7 +2,7 @@ package Enumeradores;
 
 public enum EstadoFabricacion {
     PEDIDA,
-    EN_FABRICACION,
+    EN_PRODUCCION,
     DESPACHADA,
     ENTREGADA;
 }
