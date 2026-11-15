@@ -31,4 +31,20 @@ public enum PlanFinanciacion {
         return totalConInteres / cuota;
 
     }
+
+    public static PlanFinanciacion obtenerPorCuotas(int cantidadCuotas) {
+
+        for (PlanFinanciacion plan : PlanFinanciacion.values()) {
+
+            if (plan.getCuota() == cantidadCuotas) {
+
+                return plan;
+
+            }
+
+        }
+
+        return null;
+        //throw new IllegalArgumentException("Cantidad de cuotas no válida: " + cantidadCuotas);
+    }
 }

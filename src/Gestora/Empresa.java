@@ -5,6 +5,7 @@ import DAO.ConexionVentas;
 import Enumeradores.*;
 import Excepciones.DBConexionException;
 import Excepciones.DBCreateTableException;
+import Excepciones.DocumentacionIncompletaException;
 import Modelo.*;
 
 import java.time.LocalDate;
@@ -53,14 +54,27 @@ public class Empresa {
 
                                 if(tipoVenta.equalsIgnoreCase("Contado")){
 
-                                    Contado newContado = ingresarVentaContado();
+                                    Contado vc = ingresarVentaContado();
 
-                                    //ventas.agregar(, newContado); //Falta traer el id de la BD
+                                    //ventas.agregar(, vc); //Falta traer el id de la BD
 
                                 } else if (tipoVenta.equalsIgnoreCase("Financiado")) {
 
-                                    //Falta implementar ingresarVentaFinanciado
+                                    Financiado vf = ingresarVentaFinanciado();
+                                    Administrativo administrativo = elegirAdministrativo();
 
+                                    try{
+
+                                        administrativo.aprobarCredito(vf);
+
+                                        //ventas.agregar(, vf)//Falta traer el id de la BD
+
+
+                                    }catch (DocumentacionIncompletaException e){
+
+                                        System.out.println(e.getMessage());
+
+                                    }
                                 }
 
                                 break;
@@ -256,13 +270,17 @@ public class Empresa {
         double anticipo =  sc.nextDouble();
         sc.nextLine();
 
-        System.out.println("Ingrese el plan de financiacion: ");
+        System.out.println("Ingrese el plan de financiacion (12 / 24 / 36 / 48 / 60 / 72): ");
         int plan = sc.nextInt();
         sc.nextLine();
 
-        return null;
+        PlanFinanciacion planElegido = PlanFinanciacion.obtenerPorCuotas(plan);
 
-    }//Falta terminar
+        Credito credito = ingresarCredito();
+
+        return new Financiado(fechaDeHoy, montoSenia, cliente, vendedor, cotizacion, anticipo,  planElegido, credito);
+
+    }
 
     private Credito ingresarCredito() {
 
@@ -272,12 +290,33 @@ public class Empresa {
         System.out.println("Presento el recibo de sueldo (Si/No): ");
         String reciboCredito = sc.nextLine();
 
-        System.out.println("Presento el algun servicio (Sin/No): ");
+        System.out.println("Presento el algun servicio (Si/No): ");
         String servicioCredito = sc.nextLine();
 
 
         return new Credito(SiNo.valueOf(dniCredito.toUpperCase()), SiNo.valueOf(reciboCredito.toUpperCase()), SiNo.valueOf(servicioCredito.toUpperCase()));
 
+    }
+
+    private Administrativo elegirAdministrativo(){
+
+        Administrativo administrativoElegido = null;
+
+        System.out.println("Ingrese el nombre del administrativo: ");
+        String nombreAdministrativo = sc.nextLine();
+
+        for(Empleado emp : empleados.listarEmpleadosActivos()){
+
+            if(emp.getNombre().equals(nombreAdministrativo)){
+
+                administrativoElegido = (Administrativo) emp;
+
+                break;
+            }
+
+        }
+
+        return administrativoElegido;
     }
 
 
