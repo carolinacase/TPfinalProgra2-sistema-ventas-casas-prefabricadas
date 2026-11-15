@@ -6,8 +6,11 @@ public abstract class GestoraGenerica<T, K> {
     protected HashMap<K, T> listadoElementos;
 
     public GestoraGenerica() {
+
         this.listadoElementos = new HashMap<>();
     }
+
+    //-- Metodos --
 
     public boolean agregar(K id,T elementoNuevo){
 
@@ -54,6 +57,6 @@ public abstract class GestoraGenerica<T, K> {
          return sb.toString();
         }
     }
-
+    // Abstracto: cada gestora hija define cómo actualizar su tipo de elemento
     public abstract void actualizar(T elementoAActualizar);
 }
