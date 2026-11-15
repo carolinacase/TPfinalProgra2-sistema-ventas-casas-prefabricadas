@@ -2,7 +2,7 @@ package DAO;
 
 import Enumeradores.EstadoEmpleados;
 import Excepciones.DBConexionException;
-import Excepciones.DBCreatTableException;
+import Excepciones.DBCreateTableException;
 import Modelo.Administrativo;
 import Modelo.Empleado;
 import Modelo.Vendedor;
@@ -35,7 +35,7 @@ public class ConexionEmpleados {
         }
     }
 
-    public static void insertarEmpleado(Empleado e) throws DBCreatTableException, DBConexionException{
+    public static void insertarEmpleado(Empleado e) throws DBCreateTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "INSERT INTO empleados VALUES(?,?,?,?,?,?,?,?,?)";
         try {
@@ -62,7 +62,7 @@ public class ConexionEmpleados {
     }
 
 
-    public static Map<String, Empleado> listarEmpleados() throws DBCreatTableException, DBConexionException{
+    public static Map<String, Empleado> listarEmpleados() throws DBCreateTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * from empleados";
         Map<String, Empleado> empleados = new HashMap<String, Empleado>();
@@ -89,7 +89,7 @@ public class ConexionEmpleados {
                 empleados.put(e.getDni(), e);
             }
         }catch (SQLException ex){
-            throw new DBCreatTableException("No se pudieron listar los empleados");
+            throw new DBCreateTableException("No se pudieron listar los empleados");
         }finally {
             ConexionBD.cerrarConexion();
         }

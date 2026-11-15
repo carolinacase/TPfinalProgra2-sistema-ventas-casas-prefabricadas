@@ -1,7 +1,7 @@
 package DAO;
 
 import Excepciones.DBConexionException;
-import Excepciones.DBCreatTableException;
+import Excepciones.DBCreateTableException;
 import Modelo.Cliente;
 
 import java.sql.*;
@@ -28,9 +28,9 @@ public class ConexionClientes {
             ConexionBD.cerrarConexion();
         }
     }
-    public static void insertarCliente(Cliente c) throws DBCreatTableException, DBConexionException {
+    public static void insertarCliente(Cliente c) throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
-        String query = "INSERT INTO clientes VALUES (?,?,?,?,?,?);";
+        String query = "INSERT INTO clientes VALUES (?,?,?,?,?);";
 
         try{
             PreparedStatement ps = conexion.prepareStatement(query);
@@ -41,15 +41,15 @@ public class ConexionClientes {
             ps.setString(5,c.getCorreo());
             ps.executeUpdate();
         }catch(SQLException e){
-            throw new DBCreatTableException("No se pudo insertar el cliente");
+            throw new DBCreateTableException("No se pudo insertar el cliente: " + e.getMessage());
         }finally {
             ConexionBD.cerrarConexion();
         }
     }
-    public static Map<Integer, Cliente> obtenerClientes() throws DBCreatTableException, DBConexionException, SQLException {
+    public static Map<String, Cliente> obtenerClientes() throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * FROM clientes";
-        Map<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
+        Map<String, Cliente> clientes = new HashMap<>();
 
         try{
             Statement ps = conexion.createStatement();
@@ -57,11 +57,11 @@ public class ConexionClientes {
             Cliente c;
             while(rs.next()){
                 c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"));
-                clientes.put(rs.getInt("llave"),c);
+                clientes.put(c.getDni(), c); // la clave es el dni, igual que en GestoraClientes
             }
 
         }catch (SQLException e){
-            throw new DBCreatTableException("No se pudo obtener el cliente");
+            throw new DBCreateTableException("No se pudo obtener el cliente");
         }
         finally{
             ConexionBD.cerrarConexion();
