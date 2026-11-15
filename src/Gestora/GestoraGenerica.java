@@ -57,6 +57,13 @@ public abstract class GestoraGenerica<T, K> {
          return sb.toString();
         }
     }
+
+    public T buscar(K id){
+
+         return listadoElementos.get(id);
+
+    }
+
     // Abstracto: cada gestora hija define cómo actualizar su tipo de elemento
     public abstract void actualizar(T elementoAActualizar);
 }

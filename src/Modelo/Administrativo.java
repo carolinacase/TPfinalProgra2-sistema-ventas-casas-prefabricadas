@@ -1,6 +1,7 @@
 package Modelo;
 
 import Enumeradores.EstadoEmpleados;
+import Enumeradores.SiNo;
 import Excepciones.DocumentacionIncompletaException;
 
 import java.time.LocalDate;
@@ -12,10 +13,15 @@ public class Administrativo extends Empleado{
     }
 
     public void aprobarCredito(Financiado f) throws DocumentacionIncompletaException {
-        if (!f.getCredito().documentacionCompleta()) {
+
+        if (!f.getCredito().verificarCredito()) {
+
             throw new DocumentacionIncompletaException("Falta documentación para el credito");
+
         }
-        f.getCredito().setAprobado(true);
+
+        f.getCredito().setAprobado(SiNo.SI);
+
     }
 
 
