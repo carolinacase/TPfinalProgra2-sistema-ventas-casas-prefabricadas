@@ -18,7 +18,6 @@ public class ConexionClientes {
                     "  dni VARCHAR(8) NOT NULL," +
                     "  domicilio VARCHAR(20) NOT NULL," +
                     "  correo VARCHAR(20) NOT NULL," +
-                    "  llave INT NOT NULL," +
                     "  PRIMARY KEY (dni));";
             Statement ps = conexion.createStatement();
             ps.execute(query);
