@@ -132,6 +132,7 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         }while (opcion != 0);
 
     }
+
     // Guarda la venta en MySQL, le asigna el id que generó la base y la agrega a la gestora
     public void registrarVenta(Venta v) throws DBConexionException, DBCreateTableException {
         int id = ConexionVentas.insertarVenta(v);   // MySQL la guarda y devuelve el id

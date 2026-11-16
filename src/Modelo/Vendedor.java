@@ -2,51 +2,92 @@ package Modelo;
 import Enumeradores.EstadoEmpleados;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Vendedor extends Empleado{
-    private List<Cliente> clientes;
-    private List<Venta> ventas;
+    private Map<String, Cliente> clientes;
+    private Map<Integer, Venta> ventas;
 
-    public Vendedor(String nombre, String apellido, String dni, String domicilio, String correo, int id, EstadoEmpleados estado, LocalDate fechaIngreso) {
+    public Vendedor(String nombre, String apellido, String dni, String domicilio,
+                    String correo, int id, EstadoEmpleados estado, LocalDate fechaIngreso) {
+
         super(nombre, apellido, dni, domicilio, correo, id, estado, fechaIngreso);
-        this.clientes = new ArrayList<>();
-        this.ventas = new ArrayList<>();
+
+        this.clientes = new HashMap<>();
+        this.ventas = new HashMap<>();
     }
 
-    public void argegarCliente(Cliente cliente){clientes.add(cliente);}
-    public void agregarVenta(Venta venta){ventas.add(venta);}
+    public void agregarClienteDeVendedor(Cliente cliente) {
 
-    public Cliente eliminarCliente(int dni){return clientes.remove(dni);}
-    public Venta eliminarVenta(int idVenta){return ventas.remove(idVenta);}
+        clientes.put(cliente.getDni(), cliente);
 
-    public Cliente mostrarCliente(int dni){return clientes.get(dni);}
-    public Venta mostrarVenta(int idVenta){return ventas.get(idVenta);}
+    }
 
-    public String listarClientes(){
-        StringBuilder sb=new StringBuilder();
-        for(Cliente c:clientes) {
-            sb.append(c.toString()).append("\n");
+    public void agregarVentaDeVendedor(Venta venta) {
+
+        ventas.put(venta.getIdVenta(), venta);
+
+    }
+
+    public boolean eliminarClienteDeVendedor(String dni) {
+
+        return clientes.remove(dni) != null;
+
+    }
+
+    public boolean eliminarVentaDeVendedor(int idVenta) {
+
+        return ventas.remove(idVenta) != null;
+
+    }
+
+    public Cliente mostrarClienteDeVendedor(String dni) {
+
+        return clientes.get(dni);
+
+    }
+
+    public Venta mostrarVentaDeVendedor(int idVenta) {
+
+        return ventas.get(idVenta);
+
+    }
+
+    public String listarClientesDeVendedor() {
+
+        StringBuilder sb = new StringBuilder();
+
+        int i = 1;
+
+        for (Cliente c : clientes.values()) {
+
+            sb.append(i++).append(". ").append(c.toString()).append("\n");
+
         }
+
         return sb.toString();
     }
 
-    public String listarVentas(){
-        StringBuilder sb =new StringBuilder();
-        for(Venta v:ventas){
-            sb.append(v.toString()).append("\n");
+    public String listarVentasDeVendedor() {
+
+        StringBuilder sb = new StringBuilder();
+
+        int i = 1;
+
+        for (Venta v : ventas.values()) {
+
+            sb.append(i++).append(". ").append(v.toString()).append("\n");
+
         }
         return sb.toString();
+
     }
-
-
-//    @Override
-//    public String toString() {
-//        return "Vendedor[" + "clientes: " + clientes + ", ventas: " + ventas + ']';
-//    }
 
     @Override
     public String getIdUnico() {
+
         return this.getDni();
+
     }
 }
