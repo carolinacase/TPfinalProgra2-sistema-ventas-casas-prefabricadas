@@ -24,12 +24,12 @@ public class ConexionEmpleados {
                     + "id INT NOT NULL,"
                     + "activo TINYINT(1)," // ACTIVO O INACTIVO
                     + "fecha_ingreso DATE NOT NULL,"
-                    + "tipo_empleado VARCHAR(20) NOT NULL" // VENDEDOR o ADMINISTRATIVO
+                    + "tipo_empleado VARCHAR(20) NOT NULL," // VENDEDOR o ADMINISTRATIVO
                     + "PRIMARY KEY(dni));"; // El dni será nuestra primary key
             Statement ps = conexion.createStatement();
             ps.execute(query);
         }catch (SQLException e){
-            throw new DBConexionException("No se pudo crear la tabla de empleados");
+            throw new DBConexionException("No se pudo crear la tabla de empleados: " + e.getMessage());
         }finally {
             ConexionBD.cerrarConexion();
         }
@@ -55,12 +55,26 @@ public class ConexionEmpleados {
             }
             ps.executeUpdate();
         }catch (SQLException ex){
-            throw new DBConexionException("No se pudo insertar al empleado"); // Lanzamos una excepcion si no se inserto al empleado de forma correcta
+            throw new DBCreateTableException("No se pudo insertar el empleado: " + ex.getMessage()); // Lanzamos una excepcion si no se inserto al empleado de forma correcta
         }finally {
             ConexionBD.cerrarConexion();
         }
     }
 
+    // Borra de la base el empleado con ese dni
+    public static void eliminarEmpleado(String dni) throws DBCreateTableException, DBConexionException {
+        Connection conexion = ConexionBD.obtenerConexion();
+        String query = "DELETE FROM empleados WHERE dni = ?;";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setString(1, dni);      // el ? se reemplaza por el dni recibido
+            ps.executeUpdate();        // DELETE es una modificación, por eso executeUpdate
+        } catch (SQLException e) {
+            throw new DBCreateTableException("No se pudo eliminar el empleado: " + e.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
+    }
 
     public static Map<String, Empleado> listarEmpleados() throws DBCreateTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();

@@ -22,7 +22,8 @@ public class ConexionBD {
         try {
             conexion = DriverManager.getConnection(URL, USER, PASSWORD);
         }catch (SQLException e){
-            throw new DBConexionException("Conexion no encontrada");
+            // e.getMessage() dice el motivo (MySQL apagado, contraseña incorrecta, base inexistente...)
+            throw new DBConexionException("No se pudo conectar a la base de datos: " + e.getMessage());
         }
         return conexion;
     }
@@ -31,7 +32,9 @@ public class ConexionBD {
     // Si la conexion no existe, debemos lanzar una excepcion para notificar.
     public static void cerrarConexion() throws DBConexionException {
         try {
-            conexion.close();
+            if (conexion != null) {   // SI NUNCA SE PUDO CONECTAR, NO HAY NADA QUE CERRAR (EVITA NullPointerException)
+                conexion.close();
+            }
         }catch (SQLException e){
             throw new DBConexionException("Conexion no encontrada");
         }
