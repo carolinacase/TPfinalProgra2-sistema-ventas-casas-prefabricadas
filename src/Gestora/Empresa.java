@@ -93,11 +93,21 @@ public class Empresa {
 
                                 break;
 
-                            case 2: // ELIMINAR VENTA
-                                System.out.println("Ingrese el id de la venta a eliminar: ");
+                            case 2: // DAR DE BAJA UNA VENTA (PASA A INACTIVA, NO SE BORRA)
+                                System.out.println("Ingrese el id de la venta a dar de baja: ");
                                 int idEliminar = leerEntero();
 
-                                System.out.println(ventas.eliminar(idEliminar) ? "Venta eliminada con exito" : "Venta no se pudo eliminar");
+                                try {
+                                    if (ventas.darDeBajaVenta(idEliminar)) {   // NO SE BORRA: PASA A INACTIVA EN LA BASE Y EN LA GESTORA
+                                        System.out.println("Venta dada de baja: paso a INACTIVA");
+                                    } else {
+                                        System.out.println("No existe una venta activa con ese id");
+                                    }
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexion: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println(e.getMessage());
+                                }
 
                                 break;
                             case 3: // LISTAR VENTAS DESDE LA BASE (ASI APARECEN TAMBIEN LAS DE EJECUCIONES ANTERIORES)
@@ -394,7 +404,7 @@ public class Empresa {
     private void menuVentas(){
         System.out.println("==========MENU VENTAS==========");
         System.out.println("1.=====Cargar una venta=====");
-        System.out.println("2.=====Eliminar una venta=====");
+        System.out.println("2.=====Dar de baja una venta=====");
         System.out.println("3.=====Mostrar todas las ventas=====");
         System.out.println("4.=====Actualizar una venta=====");
         System.out.println("5.=====Mostrar los pagos de hoy=====");

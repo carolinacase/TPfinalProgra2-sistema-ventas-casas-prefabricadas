@@ -146,6 +146,20 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         v.registrarPago(LocalDate.now(), monto);   // SUMA AL HISTORIAL DE PAGOS Y AL MONTO PAGADO
     }
 
+    // DA DE BAJA UNA VENTA: NO SE BORRA, PASA A INACTIVA (ASI QUEDA EL HISTORIAL DE VENTAS)
+    // SE HACE EN LA BASE Y NO SOLO EN EL HashMap PORQUE PUEDE SER UNA VENTA DE UNA EJECUCION ANTERIOR
+    // DEVUELVE FALSE SI NO EXISTE O SI YA ESTABA INACTIVA
+    public boolean darDeBajaVenta(int idVenta) throws DBConexionException, DBCreateTableException {
+        int filasModificadas = ConexionVentas.inactivarVenta(idVenta);   // PRIMERO EN LA BASE...
+
+        Venta v = buscar(idVenta);                                       // ...DESPUES EN MEMORIA, SI ESTABA CARGADA
+        if (filasModificadas > 0 && v != null) {
+            v.setEstado(EstadoVenta.INACTIVA);
+        }
+
+        return filasModificadas > 0;
+    }
+
     // CAMBIA EL ESTADO DE UNA VENTA: PRIMERO EN MySQL Y DESPUES EN LA VENTA
     public void cambiarEstado(Venta v, EstadoVenta nuevoEstado) throws DBConexionException, DBCreateTableException {
         ConexionVentas.actualizarEstado(v.getIdVenta(), nuevoEstado.name());   // EL ENUM SE GUARDA COMO TEXTO

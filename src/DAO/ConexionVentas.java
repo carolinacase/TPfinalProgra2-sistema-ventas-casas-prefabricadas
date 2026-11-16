@@ -102,6 +102,24 @@ public class ConexionVentas {
         }
     }
 
+    // DA DE BAJA LA VENTA: NO SE BORRA, PASA A INACTIVA PARA QUE QUEDE EL REGISTRO
+    // DEVUELVE CUANTAS FILAS CAMBIO (0 SI NO EXISTE O SI YA ESTABA INACTIVA)
+    public static int inactivarVenta(int idVenta) throws DBCreateTableException, DBConexionException {
+        Connection conexion = ConexionBD.obtenerConexion();
+        String query = "UPDATE ventas SET estado = 'INACTIVA' WHERE idVenta = ? AND estado <> 'INACTIVA';";
+        int filasModificadas = 0;
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setInt(1, idVenta);                  // EL ? SE REEMPLAZA POR EL ID RECIBIDO
+            filasModificadas = ps.executeUpdate();  // executeUpdate DEVUELVE LA CANTIDAD DE FILAS AFECTADAS
+        } catch (SQLException e) {
+            throw new DBCreateTableException("No se pudo dar de baja la venta: " + e.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
+        return filasModificadas;
+    }
+
     // TRAE TODAS LAS VENTAS GUARDADAS EN LA BASE (TAMBIEN LAS DE EJECUCIONES ANTERIORES)
     public static String listarVentas() throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
