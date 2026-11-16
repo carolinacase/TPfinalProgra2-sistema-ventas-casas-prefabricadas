@@ -1,7 +1,10 @@
 package Gestora;
 
+import DAO.ConexionVentas;
 import Enumeradores.EstadoVenta;
 import Enumeradores.ModeloCasa;
+import Excepciones.DBConexionException;
+import Excepciones.DBCreateTableException;
 import Modelo.Financiado;
 import Modelo.Pago;
 import Modelo.Venta;
@@ -116,5 +119,11 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
             }
         }while (opcion != 0);
 
+    }
+    // Guarda la venta en MySQL, le asigna el id que generó la base y la agrega a la gestora
+    public void registrarVenta(Venta v) throws DBConexionException, DBCreateTableException {
+        int id = ConexionVentas.insertarVenta(v);   // MySQL la guarda y devuelve el id
+        v.setIdVenta(id);                           // la venta se queda con ese id
+        agregar(id, v);                             // la clave del HashMap es el id
     }
 }
