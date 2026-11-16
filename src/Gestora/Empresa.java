@@ -100,15 +100,19 @@ public class Empresa {
                                 System.out.println(ventas.eliminar(idEliminar) ? "Venta eliminada con exito" : "Venta no se pudo eliminar");
 
                                 break;
-                            case 3: // LISTAR VENTAS
-                                List<Venta> todasLasVentas = ventas.obtenerVentas();
+                            case 3: // LISTAR VENTAS DESDE LA BASE (ASI APARECEN TAMBIEN LAS DE EJECUCIONES ANTERIORES)
+                                try {
+                                    String listado = ConexionVentas.listarVentas();
 
-                                if (todasLasVentas.isEmpty()) {
-                                    System.out.println("No hay ventas cargadas en esta sesion");
-                                } else {
-                                    for (Venta v : todasLasVentas) {
-                                        mostrarVenta(v);   // MISMO FORMATO QUE AL CARGARLA (CON SU Nº)
+                                    if (listado.isEmpty()) {
+                                        System.out.println("No hay ventas guardadas");
+                                    } else {
+                                        System.out.println(listado);
                                     }
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexion: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println(e.getMessage());
                                 }
 
                                 break;
@@ -307,14 +311,18 @@ public class Empresa {
                             case 3: // VENTAS DE UN CLIENTE
                                 System.out.println("Ingrese el DNI del cliente: ");
                                 String dniVentas = sc.nextLine().trim();
-                                List<Venta> ventasCliente = ventas.buscarVentasPorCliente(dniVentas);
+                                try {   // SE BUSCA EN LA BASE, ASI APARECEN TAMBIEN LAS VENTAS DE EJECUCIONES ANTERIORES
+                                    String ventasCliente = ConexionVentas.listarVentasPorCliente(dniVentas);
 
-                                if (ventasCliente.isEmpty()) {
-                                    System.out.println("No hay ventas cargadas para ese DNI");
-                                } else {
-                                    for (Venta v : ventasCliente) {
-                                        mostrarVenta(v);   // REUTILIZA EL RESUMEN DE LA VENTA
+                                    if (ventasCliente.isEmpty()) {
+                                        System.out.println("No hay ventas para ese DNI");
+                                    } else {
+                                        System.out.println(ventasCliente);
                                     }
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexion: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println(e.getMessage());
                                 }
                                 break;
                             case 0:
@@ -777,9 +785,11 @@ public class Empresa {
         System.out.println("Incluye platea: " + v.getCotizacion().getIncluyePlatea());
         System.out.println("Seña: $" + formatearMonto(v.getMontoSenia()));
         System.out.println("Total: $" + formatearMonto(v.getPrecioTotal()));
-        Financiado f = (Financiado) v;
-        System.out.println("Fecha vto anticipo: " + v.getFechaVto());
-        System.out.println("Anticipo: $" + f.getAnticipo());
+        if (v instanceof Financiado) {   // SOLO LAS FINANCIADAS TIENEN ANTICIPO
+            Financiado f = (Financiado) v;
+            System.out.println("Fecha vto anticipo: " + v.getFechaVto());
+            System.out.println("Anticipo: $" + formatearMonto(f.getAnticipo()));
+        }
         System.out.println("Saldo: $" + formatearMonto(v.calcularSaldo()));
         System.out.println("Estado: " + v.getEstado());   // ACTIVA, INACTIVA O PENDIENTE (FALTA DOCUMENTACION)
     }

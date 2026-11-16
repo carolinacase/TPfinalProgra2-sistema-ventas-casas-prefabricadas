@@ -88,6 +88,7 @@ public class ConexionEmpleados {
         }
     }
 
+    //MOSTRAR TODOS LOS EMPLEADOS DESDE LA SQL
     public static Map<String, Empleado> listarEmpleados() throws DBCreateTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * from empleados";

@@ -7,6 +7,7 @@ import Modelo.Contado;
 import Modelo.Venta;
 
 import java.sql.*;
+import java.util.Locale;
 
 public class ConexionVentas {
     public static void crearTablaVentas() throws DBConexionException {
@@ -99,6 +100,63 @@ public class ConexionVentas {
         } finally {
             ConexionBD.cerrarConexion();
         }
+    }
+
+    // TRAE TODAS LAS VENTAS GUARDADAS EN LA BASE (TAMBIEN LAS DE EJECUCIONES ANTERIORES)
+    public static String listarVentas() throws DBCreateTableException, DBConexionException {
+        Connection conexion = ConexionBD.obtenerConexion();
+        String query = "SELECT * FROM ventas ORDER BY idVenta;";
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();   // SELECT ES UNA CONSULTA, POR ESO executeQuery
+            sb.append(armarListado(rs));
+        } catch (SQLException e) {
+            throw new DBCreateTableException("No se pudieron listar las ventas: " + e.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
+
+        return sb.toString();
+    }
+
+    // TRAE DE LA BASE SOLO LAS VENTAS DE UN CLIENTE (UN CLIENTE PUEDE TENER VARIAS)
+    public static String listarVentasPorCliente(String dni) throws DBCreateTableException, DBConexionException {
+        Connection conexion = ConexionBD.obtenerConexion();
+        String query = "SELECT * FROM ventas WHERE dniCliente = ? ORDER BY idVenta;";
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setString(1, dni);   // EL DNI VA COMO PARAMETRO, NUNCA CONCATENADO
+            ResultSet rs = ps.executeQuery();
+            sb.append(armarListado(rs));
+        } catch (SQLException e) {
+            throw new DBCreateTableException("No se pudieron buscar las ventas del cliente: " + e.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
+
+        return sb.toString();
+    }
+
+    // ARMA UNA LINEA POR CADA VENTA DEL RESULTADO (LO USAN LOS DOS LISTADOS)
+    private static String armarListado(ResultSet rs) throws SQLException {
+        StringBuilder sb = new StringBuilder();
+
+        while (rs.next()) {   // RECORRE FILA POR FILA
+            sb.append("Venta Nº ").append(rs.getInt("idVenta"))
+                    .append(" | ").append(rs.getString("tipo"))
+                    .append(" | Fecha: ").append(rs.getDate("fechaSenia"))
+                    .append(" | Cliente DNI: ").append(rs.getString("dniCliente"))
+                    .append(" | Total: $").append(String.format(Locale.of("es", "AR"), "%,.2f", rs.getDouble("precioTotal")))
+                    .append(" | Pagado: $").append(String.format(Locale.of("es", "AR"), "%,.2f", rs.getDouble("montoPagado")))
+                    .append(" | Estado: ").append(rs.getString("estado"))
+                    .append("\n");
+        }
+
+        return sb.toString();
     }
 
 }
