@@ -22,10 +22,10 @@ public class ConexionEmpleados {
                     + "domicilio VARCHAR(20) NOT NULL,"
                     + "correo VARCHAR(20) NOT NULL,"
                     + "id INT NOT NULL,"
-                    + "activo TINYINT(1),"
+                    + "activo TINYINT(1)," // ACTIVO O INACTIVO
                     + "fecha_ingreso DATE NOT NULL,"
-                    + "tipo_empleado VARCHAR(20) NOT NULL"
-                    + "PRIMARY KEY(dni));";
+                    + "tipo_empleado VARCHAR(20) NOT NULL" // VENDEDOR o ADMINISTRATIVO
+                    + "PRIMARY KEY(dni));"; // El dni será nuestra primary key
             Statement ps = conexion.createStatement();
             ps.execute(query);
         }catch (SQLException e){
@@ -48,14 +48,14 @@ public class ConexionEmpleados {
             ps.setInt(6, e.getId());
             ps.setBoolean(7, e.getEstado().getValorEstado());
             ps.setDate(8, Date.valueOf(e.getFechaIngreso()));
-            if(e instanceof Vendedor){
+            if(e instanceof Vendedor){ // Guardamos el tipo de empleado como texto.
                 ps.setString(9, "VENDEDOR");
             }else if(e instanceof Administrativo){
                 ps.setString(9, "ADMINISTRATIVO");
             }
             ps.executeUpdate();
         }catch (SQLException ex){
-            throw new DBConexionException("No se pudo insertar al empleado");
+            throw new DBConexionException("No se pudo insertar al empleado"); // Lanzamos una excepcion si no se inserto al empleado de forma correcta
         }finally {
             ConexionBD.cerrarConexion();
         }
@@ -65,28 +65,28 @@ public class ConexionEmpleados {
     public static Map<String, Empleado> listarEmpleados() throws DBCreateTableException, DBConexionException{
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * from empleados";
-        Map<String, Empleado> empleados = new HashMap<String, Empleado>();
+        Map<String, Empleado> empleados = new HashMap<String, Empleado>(); // Creamos un HashMap con String para el dni como clave y empleado como valor.
         Empleado e;
         try {
             Statement ps = conexion.createStatement();
             ResultSet rs = ps.executeQuery(query);
             while (rs.next()){
-                EstadoEmpleados estado = rs.getBoolean("activo") ? EstadoEmpleados.ACTIVO : EstadoEmpleados.INACTIVO;
-                String tipo = rs.getString("tipo_empleado");
-                if(tipo.equals("VENDEDOR")){
+                EstadoEmpleados estado = rs.getBoolean("activo") ? EstadoEmpleados.ACTIVO : EstadoEmpleados.INACTIVO; // Creamos una variable de tipo EstadoEmpleados.
+                String tipo = rs.getString("tipo_empleado"); // Creamos una variable de tipo String para el tipo de empleados
+                if(tipo.equals("VENDEDOR")){ // Si es vendedor, creamos un objeto de tipo empleado, e instanciamos con con ResultSet y el constructor
                     e = new Vendedor(rs.getString("nombre"), rs.getString("apellido"),
                             rs.getString("dni"), rs.getString("domicilio"),
                             rs.getString("correo"), rs.getInt("id"),
                             estado, rs.getDate("fecha_ingreso").toLocalDate());
-                }else if(tipo.equals("ADMINISTRATIVO")){
+                }else if(tipo.equals("ADMINISTRATIVO")){ // Hacemos lo mismo con administrativo
                     e = new Administrativo(rs.getString("nombre"), rs.getString("apellido"),
                             rs.getString("dni"), rs.getString("domicilio"),
                             rs.getString("correo"), rs.getInt("id"),
                             estado, rs.getDate("fecha_ingreso").toLocalDate());
                 }else{
-                    throw new SQLException("Tipo de empleado desconocido");
+                    throw new SQLException("Tipo de empleado desconocido"); // Lanzamos una excepcion si agregamos un empleado que no sea válido
                 }
-                empleados.put(e.getDni(), e);
+                empleados.put(e.getDni(), e); // Agregamos un empleado al HashMap
             }
         }catch (SQLException ex){
             throw new DBCreateTableException("No se pudieron listar los empleados");
