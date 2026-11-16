@@ -2,7 +2,7 @@
 import Gestora.Empresa;
 
 void main() {
-    Empresa empresa = new Empresa("Casas Prefabricadas"); //Creo una empresa nueva
+    Empresa empresa = new Empresa("Casas Prefabricadas"); //CREO UNA EMPRESA NUEVA
 
-    empresa.consultarEmpresa();   // abre el menú principal
+    empresa.consultarEmpresa();   // ABRE EL MENU PRINCIPAL
 }

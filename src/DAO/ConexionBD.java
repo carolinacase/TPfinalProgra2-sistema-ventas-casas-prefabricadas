@@ -22,13 +22,13 @@ public class ConexionBD {
         try {
             conexion = DriverManager.getConnection(URL, USER, PASSWORD);
         }catch (SQLException e){
-            // e.getMessage() dice el motivo (MySQL apagado, contraseña incorrecta, base inexistente...)
+            // e.getMessage() DICE EL MOTIVO (MySQL APAGADO, CONTRASEÑA INCORRECTA, BASE INEXISTENTE...)
             throw new DBConexionException("No se pudo conectar a la base de datos: " + e.getMessage());
         }
         return conexion;
     }
 
-    // Usamos conexion para cerrarla y así liberar recursos.
+    // Usamos conexion para cerrarla y asi liberar recursos.
     // Si la conexion no existe, debemos lanzar una excepcion para notificar.
     public static void cerrarConexion() throws DBConexionException {
         try {

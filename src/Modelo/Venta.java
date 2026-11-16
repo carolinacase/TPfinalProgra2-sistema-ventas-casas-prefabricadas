@@ -42,7 +42,7 @@ public abstract class Venta{
         this.fechaSenia = fechaSenia;
         this.fechaVto = fechaSenia.plusDays(15);
         this.montoSenia = montoSenia;
-        this.montoPagado = montoPagado; // Aca va el total que ya pago traído de la BD
+        this.montoPagado = montoPagado; // Aca va el total que ya pago traido de la BD
         this.precioTotal = cotizacion.calcularPrecio();
         this.historialDePagos = historialDePagos; // Aca va la lista de pagos de la tabla pagos
         this.estado = estado;
@@ -130,7 +130,7 @@ public abstract class Venta{
 
     public abstract double calcularSaldo();
 
-    // 1. Acá validamos la venta. Para ello, hemos creado VentaInvalidaException.
+    // 1. Aca validamos la venta. Para ello, hemos creado VentaInvalidaException.
     public void validar() throws VentaInvalidaException {
             if (cliente == null) {
                 throw new VentaInvalidaException("La venta no tiene cliente asignado");
@@ -139,7 +139,7 @@ public abstract class Venta{
                 throw new VentaInvalidaException("La venta no tiene vendedor asignado");
             }
             if (cotizacion == null) {
-                throw new VentaInvalidaException("La venta no tiene una cotización asociada");
+                throw new VentaInvalidaException("La venta no tiene una cotizacion asociada");
             }
 
     }

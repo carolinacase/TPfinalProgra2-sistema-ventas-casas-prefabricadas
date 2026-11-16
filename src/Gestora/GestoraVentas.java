@@ -77,7 +77,7 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                     }
                     break;
                 case 2:
-                    // SE ELIGE POR NUMERO PARA EVITAR ERRORES DE TIPEO (antes un texto mal escrito cortaba el programa)
+                    // SE ELIGE POR NUMERO PARA EVITAR ERRORES DE TIPEO (ANTES UN TEXTO MAL ESCRITO CORTABA EL PROGRAMA)
                     System.out.println("Elija el nuevo estado de la venta:");
                     System.out.println("1. Activa");
                     System.out.println("2. Inactiva");
@@ -90,7 +90,7 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                         elementoAActualizar.setEstado(EstadoVenta.INACTIVA);
                         System.out.println("Estado de la venta actualizado con exito!");
                     } else {
-                        System.out.println("Opcion invalida, el estado no se modificó");
+                        System.out.println("Opcion invalida, el estado no se modifico");
                     }
 
                     break;
@@ -133,17 +133,17 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
 
     }
 
-    // Guarda la venta en MySQL, le asigna el id que generó la base y la agrega a la gestora
+    // GUARDA LA VENTA EN MySQL, LE ASIGNA EL ID QUE GENERO LA BASE Y LA AGREGA A LA GESTORA
     public void registrarVenta(Venta v) throws DBConexionException, DBCreateTableException {
-        int id = ConexionVentas.insertarVenta(v);   // MySQL la guarda y devuelve el id
-        v.setIdVenta(id);                           // la venta se queda con ese id
-        agregar(id, v);                             // la clave del HashMap es el id
+        int id = ConexionVentas.insertarVenta(v);   // MySQL LA GUARDA Y DEVUELVE EL ID
+        v.setIdVenta(id);                           // LA VENTA SE QUEDA CON ESE ID
+        agregar(id, v);                             // LA CLAVE DEL HashMap ES EL ID
     }
 
-    // Lee un número entero sin que el programa se corte si el usuario escribe letras
+    // EVITANDO ERRORES LEE UN NUMERO ENTERO SIN QUE EL PROGRAMA SE CORTE SI EL USUARIO ESCRIBE LETRAS
     private int leerEntero(Scanner sc) {
         while (!sc.hasNextInt()) {
-            System.out.println("Debe ingresar un número");
+            System.out.println("Debe ingresar un numero");
             sc.nextLine();
         }
         int numero = sc.nextInt();
@@ -151,14 +151,31 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         return numero;
     }
 
-    // Lo mismo para números con decimales
+    // EVITANDO ERRORES LO MISMO PARA NUMEROS CON DECIMALES
     private double leerDouble(Scanner sc) {
         while (!sc.hasNextDouble()) {
-            System.out.println("Debe ingresar un número");
+            System.out.println("Debe ingresar un numero");
             sc.nextLine();
         }
         double numero = sc.nextDouble();
         sc.nextLine();
         return numero;
+    }
+    // DEVUELVE TODAS LAS VENTAS DE UN CLIENTE (UN CLIENTE PUEDE TENER VARIAS)
+    // DEVUELVE TODAS LAS VENTAS CARGADAS (PARA QUE Empresa LAS MUESTRE)
+    public List<Venta> obtenerVentas() {
+        return new ArrayList<>(listadoElementos.values());
+    }
+
+    public List<Venta> buscarVentasPorCliente(String dni) {
+        List<Venta> ventasDelCliente = new ArrayList<>();
+
+        for (Venta v : listadoElementos.values()) {
+            if (v.getCliente().getDni().equals(dni)) {
+                ventasDelCliente.add(v);
+            }
+        }
+
+        return ventasDelCliente;
     }
 }

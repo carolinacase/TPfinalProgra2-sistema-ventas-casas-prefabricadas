@@ -18,8 +18,8 @@ public class ConexionClientes {
                     "  nombre VARCHAR(50) NOT NULL," +
                     "  apellido VARCHAR(50) NOT NULL," +
                     "  dni VARCHAR(8) NOT NULL," +
-                    "  domicilio VARCHAR(20) NOT NULL," +
-                    "  correo VARCHAR(20) NOT NULL," +
+                    "  domicilio VARCHAR(50) NOT NULL," +   // 50 PARA QUE ENTREN DIRECCIONES Y MAILS COMUNES
+                    "  correo VARCHAR(50) NOT NULL," +
                     "  PRIMARY KEY (dni));";
             Statement ps = conexion.createStatement();
             ps.execute(query);
@@ -31,7 +31,7 @@ public class ConexionClientes {
         }
     }
 
-    // Si no se logra insertar un cliente, lanzamos también una excepcion
+    // Si no se logra insertar un cliente, lanzamos tambien una excepcion
     public static void insertarCliente(Cliente c) throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "INSERT INTO clientes VALUES (?,?,?,?,?);";
@@ -53,7 +53,7 @@ public class ConexionClientes {
 
     // Creamos un Map de tipo String para el dni (siendo su clave) y de tipo Cliente (siendo su valor)
     // Si no se logra obtener al cliente, lanzamos una excepcion
-    // Por otro lado, agregamos el objeto de tipo cliente al Map y por último retornamos el Map.
+    // Por otro lado, agregamos el objeto de tipo cliente al Map y por ultimo retornamos el Map.
     public static Map<String, Cliente> obtenerClientes() throws DBCreateTableException, DBConexionException {
         Connection conexion = ConexionBD.obtenerConexion();
         String query = "SELECT * FROM clientes";
@@ -65,7 +65,7 @@ public class ConexionClientes {
             Cliente c;
             while(rs.next()){
                 c = new Cliente(rs.getString("nombre"),rs.getString("apellido"),rs.getString("dni"),rs.getString("domicilio"),rs.getString("correo"));
-                clientes.put(c.getDni(), c); // la clave es el dni, igual que en GestoraClientes
+                clientes.put(c.getDni(), c); // LA CLAVE ES EL DNI, IGUAL QUE EN GestoraClientes
             }
 
         }catch (SQLException e){

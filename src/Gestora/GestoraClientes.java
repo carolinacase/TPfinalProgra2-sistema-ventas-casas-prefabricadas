@@ -59,8 +59,8 @@ public class GestoraClientes extends GestoraGenerica<Cliente, String> {
         }while (opcion != 0);
     }
 
-    // Si el cliente no existe todavía, lo guarda en MySQL y en la gestora.
-    // Si ya existe (por ejemplo, compra su segunda casa), no hace nada.
+    // SI EL CLIENTE NO EXISTE TODAVIA, LO GUARDA EN MySQL Y EN LA GESTORA.
+    // SI YA EXISTE (POR EJEMPLO, COMPRA SU SEGUNDA CASA), NO HACE NADA.
     public void registrarCliente(Cliente c) throws DBConexionException, DBCreateTableException {
         if (buscar(c.getDni()) == null) {
             ConexionClientes.insertarCliente(c);

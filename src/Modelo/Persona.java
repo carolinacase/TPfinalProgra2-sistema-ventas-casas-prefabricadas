@@ -77,12 +77,7 @@ public abstract class Persona implements IIdUnico {
 
     @Override
     public String toString() {
-        return "Persona{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", dni='" + dni + '\'' +
-                ", domicilio='" + domicilio + '\'' +
-                ", correo='" + correo + '\'' +
-                '}';
+        // FORMATO LEGIBLE PARA LOS LISTADOS DEL MENU
+        return getNombreCompleto() + " - DNI " + dni + " - " + domicilio + " - " + correo;
     }
 }

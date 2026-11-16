@@ -10,7 +10,7 @@ public abstract class GestoraGenerica<T, K> {
         this.listadoElementos = new HashMap<>();
     }
 
-    //-- Metodos --
+    //-- METODOS --
 
     public boolean agregar(K id,T elementoNuevo){
 
@@ -64,6 +64,6 @@ public abstract class GestoraGenerica<T, K> {
 
     }
 
-    // Abstracto: cada gestora hija define cómo actualizar su tipo de elemento
+    // ABSTRACTO: CADA GESTORA HIJA DEFINE COMO ACTUALIZAR SU TIPO DE ELEMENTO
     public abstract void actualizar(T elementoAActualizar);
 }

@@ -55,10 +55,7 @@ public abstract class Empleado extends Persona{
 
     @Override
     public String toString() {
-        return "Empleado{" +
-                "id=" + id +
-                ", estado=" + estado +
-                ", fechaIngreso=" + fechaIngreso +
-                "} " + super.toString();
+        // LEGAJO + DATOS DE LA PERSONA + ESTADO Y FECHA DE INGRESO
+        return "Legajo " + id + " - " + super.toString() + " - " + estado + " - ingreso " + fechaIngreso;
     }
 }
