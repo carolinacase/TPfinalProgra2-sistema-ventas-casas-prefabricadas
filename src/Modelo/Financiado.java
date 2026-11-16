@@ -1,6 +1,5 @@
 package Modelo;
 
-import Enumeradores.EstadoVenta;
 import Enumeradores.PlanFinanciacion;
 import Excepciones.AnticipoInsuficienteException;
 
@@ -42,7 +41,9 @@ public class Financiado extends Venta{
 
     // ANTICIPO MINIMO PARA UN PRECIO DADO (30%). ES static PORQUE Empresa LO NECESITA ANTES DE CREAR LA VENTA
     public static double calcularAnticipoMinimo(double precioTotal) {
+
         return precioTotal * PRIMER_ANTICIPO;
+
     }
 
     // Hacemos lo mismo para validar el anticipo

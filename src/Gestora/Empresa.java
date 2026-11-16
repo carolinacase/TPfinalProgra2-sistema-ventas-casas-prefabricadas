@@ -686,11 +686,16 @@ public class Empresa {
 
     private void mostrarVenta(Venta v) {
         System.out.println("===== VENTA Nº " + v.getIdVenta() + " =====");   // EL ID SE USA PARA ELIMINAR O ACTUALIZAR
+        System.out.println("Fecha de venta: " + v.getFechaSenia());
+        System.out.println("Estado de venta: " + v.getEstado());
         System.out.println("Cliente: " + v.getCliente().getNombreCompleto() + " (DNI " + v.getCliente().getDni() + ")");
         System.out.println("Modelo: " + v.getCotizacion().getModeloCasa() + " - " + v.getCotizacion().getM2() + " m2");
         System.out.println("Incluye platea: " + v.getCotizacion().getIncluyePlatea());
-        System.out.println("Precio total: $" + formatearMonto(v.getPrecioTotal()));
         System.out.println("Seña: $" + formatearMonto(v.getMontoSenia()));
+        System.out.println("Total: $" + formatearMonto(v.getPrecioTotal()));
+        Financiado f = (Financiado) v;
+        System.out.println("Fecha vto anticipo: " + v.getFechaVto());
+        System.out.println("Anticipo: $" + f.getAnticipo());
         System.out.println("Saldo: $" + formatearMonto(v.calcularSaldo()));
     }
 
