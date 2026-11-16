@@ -1,6 +1,7 @@
 package Modelo;
 
 import java.time.LocalDate;
+import java.util.Locale;
 
 public class Pago {
     private LocalDate fecha;
@@ -28,10 +29,7 @@ public class Pago {
     }
 
     @Override
-    public String toString() {
-        return "Pago{" +
-                "fecha=" + fecha +
-                ", monto=" + monto +
-                '}';
+    public String toString() {   // FORMATO LEGIBLE, CON EL MONTO COMPLETO EN FORMATO ARGENTINO
+        return "Pago del " + fecha + " por $" + String.format(Locale.of("es", "AR"), "%,.2f", monto);
     }
 }

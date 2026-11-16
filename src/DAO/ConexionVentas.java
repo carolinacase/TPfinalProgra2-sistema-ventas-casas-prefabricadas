@@ -69,4 +69,36 @@ public class ConexionVentas {
         return idGenerado;
     }
 
+    // ACTUALIZA CUANTO LLEVA PAGADO UNA VENTA (SE USA CADA VEZ QUE SE REGISTRA UN PAGO)
+    public static void actualizarMontoPagado(int idVenta, double montoPagado) throws DBCreateTableException, DBConexionException {
+        Connection conexion = ConexionBD.obtenerConexion();
+        String query = "UPDATE ventas SET montoPagado = ? WHERE idVenta = ?;";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setDouble(1, montoPagado);
+            ps.setInt(2, idVenta);
+            ps.executeUpdate();   // UPDATE ES UNA MODIFICACION, POR ESO executeUpdate
+        } catch (SQLException e) {
+            throw new DBCreateTableException("No se pudo registrar el pago: " + e.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
+    }
+
+    // ACTUALIZA EL ESTADO DE UNA VENTA (EJ: DE PENDIENTE A ACTIVA CUANDO SE COMPLETA LA DOCUMENTACION)
+    public static void actualizarEstado(int idVenta, String estado) throws DBCreateTableException, DBConexionException {
+        Connection conexion = ConexionBD.obtenerConexion();
+        String query = "UPDATE ventas SET estado = ? WHERE idVenta = ?;";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setString(1, estado);
+            ps.setInt(2, idVenta);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DBCreateTableException("No se pudo actualizar el estado de la venta: " + e.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
+    }
+
 }

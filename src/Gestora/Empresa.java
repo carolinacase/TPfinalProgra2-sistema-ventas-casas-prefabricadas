@@ -83,7 +83,11 @@ public class Empresa {
                                     }catch (AnticipoInsuficienteException e){
                                         System.out.println(e.getMessage());   // MUESTRA EL ANTICIPO MINIMO
                                     }catch (DocumentacionIncompletaException e){
+                                        // SI FALTA DOCUMENTACION LA VENTA SE GUARDA IGUAL, PERO PENDIENTE (SE COMPLETA DESPUES CON LA OPCION 7)
                                         System.out.println(e.getMessage());
+                                        vf.setEstado(EstadoVenta.PENDIENTE);
+                                        System.out.println("Venta guardada como PENDIENTE: falta documentacion para aprobar el credito");
+                                        guardarVenta(vf);
                                     }
                                 }
 
@@ -122,11 +126,89 @@ public class Empresa {
 
                                 break;
                             case 5: // VERIFICAR PAGOS DE HOY
+                                List<Pago> pagosDeHoy = ventas.verificarPagosDeHoy();
 
-                                for(Pago pg : ventas.verificarPagosDeHoy()){
+                                if (pagosDeHoy.isEmpty()) {
+                                    System.out.println("No hay pagos registrados hoy");
+                                } else {
+                                    for(Pago pg : pagosDeHoy){
+                                        System.out.println(pg);
+                                    }
+                                }
 
-                                    System.out.println(pg);
+                                break;
+                            case 6: // REGISTRAR UN PAGO
+                                System.out.println("Ingrese el id de la venta: ");
+                                int idVentaPago = leerEntero();
+                                Venta ventaPago = ventas.buscar(idVentaPago);
 
+                                if (ventaPago == null) {
+                                    System.out.println("No existe una venta con ese id");
+                                    break;
+                                }
+
+                                double saldoPendiente = ventaPago.calcularSaldo();   // CADA TIPO DE VENTA LO CALCULA A SU MANERA
+                                if (saldoPendiente <= 0) {
+                                    System.out.println("La venta ya esta totalmente pagada");
+                                    break;
+                                }
+
+                                System.out.println("Saldo pendiente: $" + formatearMonto(saldoPendiente));
+
+                                double montoPago;
+                                do {   // SE REPITE HASTA QUE EL MONTO SEA MAYOR A 0 Y NO SUPERE EL SALDO
+                                    System.out.println("Ingrese el monto del pago: ");
+                                    montoPago = leerDouble();
+
+                                    if (montoPago <= 0 || montoPago > saldoPendiente) {
+                                        System.out.println("El monto tiene que ser mayor a 0 y no superar el saldo pendiente");
+                                    }
+                                } while (montoPago <= 0 || montoPago > saldoPendiente);
+
+                                try {
+                                    ventas.registrarPago(ventaPago, montoPago);
+                                    System.out.println("Pago registrado. Saldo restante: $" + formatearMonto(ventaPago.calcularSaldo()));
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexion: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println("No se pudo registrar el pago: " + e.getMessage());
+                                }
+
+                                break;
+                            case 7: // COMPLETAR DOCUMENTACION DE UN FINANCIADO PENDIENTE
+                                System.out.println("Ingrese el id de la venta: ");
+                                int idPendiente = leerEntero();
+                                Venta ventaPendiente = ventas.buscar(idPendiente);
+
+                                if (ventaPendiente == null) {
+                                    System.out.println("No existe una venta con ese id");
+                                    break;
+                                }
+                                if (!(ventaPendiente instanceof Financiado) || ventaPendiente.getEstado() != EstadoVenta.PENDIENTE) {
+                                    System.out.println("Esa venta no tiene documentacion pendiente");
+                                    break;
+                                }
+
+                                Financiado financiadoPendiente = (Financiado) ventaPendiente;
+                                Credito creditoPendiente = financiadoPendiente.getCredito();
+
+                                // SE VUELVE A PREGUNTAR LA DOCUMENTACION Y SE ACTUALIZA EL CREDITO QUE YA TIENE LA VENTA
+                                creditoPendiente.setDniPresentado(elegirSiNo("Presento el DNI?"));
+                                creditoPendiente.setReciboSueldoPresentado(elegirSiNo("Presento el recibo de sueldo?"));
+                                creditoPendiente.setServicioPresentado(elegirSiNo("Presento algun servicio?"));
+
+                                try {
+                                    Administrativo aprueba = elegirAdministrativo();
+                                    aprueba.aprobarCredito(financiadoPendiente);              // SI SIGUE INCOMPLETA SALTA AL catch
+                                    ventas.cambiarEstado(financiadoPendiente, EstadoVenta.ACTIVA);
+                                    System.out.println("Credito aprobado. La venta paso a ACTIVA");
+                                    mostrarVenta(financiadoPendiente);
+                                } catch (DocumentacionIncompletaException e) {
+                                    System.out.println(e.getMessage() + ". La venta sigue PENDIENTE");
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexion: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println("No se pudo actualizar la venta: " + e.getMessage());
                                 }
 
                                 break;
@@ -308,6 +390,8 @@ public class Empresa {
         System.out.println("3.=====Mostrar todas las ventas=====");
         System.out.println("4.=====Actualizar una venta=====");
         System.out.println("5.=====Mostrar los pagos de hoy=====");
+        System.out.println("6.=====Registrar un pago=====");
+        System.out.println("7.=====Completar documentacion de un credito=====");
         System.out.println("0. Salir");
     }
 //--------------------------------METODOS VENTAS----------------
@@ -692,6 +776,7 @@ public class Empresa {
         System.out.println("Precio total: $" + formatearMonto(v.getPrecioTotal()));
         System.out.println("Seña: $" + formatearMonto(v.getMontoSenia()));
         System.out.println("Saldo: $" + formatearMonto(v.calcularSaldo()));
+        System.out.println("Estado: " + v.getEstado());   // ACTIVA, INACTIVA O PENDIENTE (FALTA DOCUMENTACION)
     }
 
     // MUESTRA EL MONTO COMPLETO CON PUNTOS DE MILES Y 2 DECIMALES (EJ: 12.430.000,00) EN VEZ DE 1.243E7
