@@ -16,6 +16,14 @@ import java.util.Scanner;
 
 public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
 
+    // USA EL MISMO SCANNER QUE EMPRESA: CON DOS SCANNER SOBRE System.in UNO PUEDE "COMERSE" LO QUE ESCRIBE EL USUARIO
+    private Scanner sc;
+
+    public GestoraVentas(Scanner sc) {
+        super();
+        this.sc = sc;
+    }
+
     public List<Pago> verificarPagosDeHoy(){
 
         List<Pago> pagosDeHoy = new ArrayList<>();
@@ -48,15 +56,12 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
     @Override
     public void actualizar(Venta elementoAActualizar) {
 
-        Scanner sc = new Scanner(System.in);
-
         int opcion;
 
         do{
             menuActualizarVenta();
 
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = leerEntero(sc);
 
             switch (opcion){
                 case 1:
@@ -64,8 +69,7 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                         Financiado financiado = (Financiado) elementoAActualizar;
 
                         System.out.println("Ingrese el nuevo monto del anticipo: ");
-                        double nuevoMontoAnticipo = sc.nextDouble();
-                        sc.nextLine();
+                        double nuevoMontoAnticipo = leerDouble(sc);
 
                         financiado.setAnticipo(nuevoMontoAnticipo);
 
@@ -73,12 +77,21 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                     }
                     break;
                 case 2:
-                    System.out.println("Ingrese el nuevo estado de la venta (Activa/Inactiva): ");
-                    String nuevoEstado = sc.nextLine();
+                    // SE ELIGE POR NUMERO PARA EVITAR ERRORES DE TIPEO (antes un texto mal escrito cortaba el programa)
+                    System.out.println("Elija el nuevo estado de la venta:");
+                    System.out.println("1. Activa");
+                    System.out.println("2. Inactiva");
+                    int opcionEstado = leerEntero(sc);
 
-                    elementoAActualizar.setEstado(EstadoVenta.valueOf(nuevoEstado.toUpperCase()));
-
-                    System.out.println("Estado de la venta actualizado con exito!");
+                    if(opcionEstado == 1){
+                        elementoAActualizar.setEstado(EstadoVenta.ACTIVA);
+                        System.out.println("Estado de la venta actualizado con exito!");
+                    } else if(opcionEstado == 2){
+                        elementoAActualizar.setEstado(EstadoVenta.INACTIVA);
+                        System.out.println("Estado de la venta actualizado con exito!");
+                    } else {
+                        System.out.println("Opcion invalida, el estado no se modificó");
+                    }
 
                     break;
                 case 3:
@@ -91,8 +104,7 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
                         System.out.println((i + 1) + ". " + modelos[i].name() + " (Valor m2: $" + modelos[i].getValorM2() + ")\n");
                     }
 
-                    int seleccion = sc.nextInt();
-                    sc.nextLine();
+                    int seleccion = leerEntero(sc);
 
                     if(seleccion >= 1 && seleccion <= modelos.length){
 
@@ -125,5 +137,27 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         int id = ConexionVentas.insertarVenta(v);   // MySQL la guarda y devuelve el id
         v.setIdVenta(id);                           // la venta se queda con ese id
         agregar(id, v);                             // la clave del HashMap es el id
+    }
+
+    // Lee un número entero sin que el programa se corte si el usuario escribe letras
+    private int leerEntero(Scanner sc) {
+        while (!sc.hasNextInt()) {
+            System.out.println("Debe ingresar un número");
+            sc.nextLine();
+        }
+        int numero = sc.nextInt();
+        sc.nextLine();
+        return numero;
+    }
+
+    // Lo mismo para números con decimales
+    private double leerDouble(Scanner sc) {
+        while (!sc.hasNextDouble()) {
+            System.out.println("Debe ingresar un número");
+            sc.nextLine();
+        }
+        double numero = sc.nextDouble();
+        sc.nextLine();
+        return numero;
     }
 }

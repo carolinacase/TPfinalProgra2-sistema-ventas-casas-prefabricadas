@@ -6,4 +6,3 @@ void main() {
 
     empresa.consultarEmpresa();   // abre el menú principal
 }
-

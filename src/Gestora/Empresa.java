@@ -1,6 +1,7 @@
 package Gestora;
 
 import DAO.ConexionClientes;
+import DAO.ConexionEmpleados;
 import DAO.ConexionVentas;
 import Enumeradores.*;
 import Excepciones.AnticipoInsuficienteException;
@@ -23,34 +24,37 @@ public class Empresa {
     Scanner sc = new Scanner(System.in);
 
     public Empresa(String nombre) {
-        this.ventas = new GestoraVentas();
+        this.ventas = new GestoraVentas(sc);   // le pasa el mismo Scanner (hay uno solo en todo el programa)
         this.empleados = new GestoraEmpleados();
         this.clientes = new GestoraClientes();
         this.nombre = nombre;
     }
 
     public void consultarEmpresa(){
-        cargarBaseDeDatos();   // prepara tablas y trae los clientes antes de mostrar el menú
+        cargarBaseDeDatos();   // trae los clientes antes de mostrar el menú
 
 
         int opcionPrincipal;
 
         do{
             menuPrincipal();
-            opcionPrincipal = sc.nextInt();
-            sc.nextLine();
+            opcionPrincipal = leerEntero();
 
-            switch(opcionPrincipal){
-                case 1:
+            switch(opcionPrincipal){  // SE ELIGE EN QUE OPCION INGRESAR: VENTAS, EMPLEADOS, CLIENTES
+                case 1: // VENTAS
                     int opcionVentas;
 
                     do{
                         menuVentas();
-                        opcionVentas = sc.nextInt();
-                        sc.nextLine();
+                        opcionVentas = leerEntero();
 
                         switch(opcionVentas){
-                            case 1:
+                            case 1: // CARGAR VENTA
+                                if(listarVendedores().isEmpty()){   // SIN VENDEDORES NO SE PUEDE CARGAR UNA VENTA
+                                    System.out.println("No hay vendedores activos. Primero dé de alta uno en el menú de empleados");
+                                    break;
+                                }
+
                                 System.out.println("Carga de Venta: ");
                                 System.out.println("Ingrese tipo de venta -> Contado/Financiado ");
                                 String tipoVenta = sc.nextLine();
@@ -61,6 +65,11 @@ public class Empresa {
                                     guardarVenta(vc);
 
                                 } else if (tipoVenta.equalsIgnoreCase("Financiado")) {
+
+                                    if(listarAdministrativos().isEmpty()){   // SIN ADMINISTRATIVOS NADIE PUEDE APROBAR EL CREDITO
+                                        System.out.println("No hay administrativos activos para aprobar el crédito. Primero dé de alta uno en el menú de empleados");
+                                        break;
+                                    }
 
                                     Financiado vf = ingresarVentaFinanciado();
 
@@ -79,30 +88,32 @@ public class Empresa {
 
                                 break;
 
-                            case 2:
+                            case 2: // ELIMINAR VENTA
                                 System.out.println("Ingrese el id de la venta a eliminar: ");
-                                int idEliminar = sc.nextInt();
-                                sc.nextLine();
+                                int idEliminar = leerEntero();
 
                                 System.out.println(ventas.eliminar(idEliminar) ? "Venta eliminada con exito" : "Venta no se pudo eliminar");
 
                                 break;
-                            case 3:
+                            case 3: // LISTAR VENTAS
 
                                 ventas.listar();
 
                                 break;
-                            case 4:
+                            case 4: // BUSCAR VENTA
                                 System.out.println("Ingrese el id de la venta a actualizar: ");
-                                int idActualizar = sc.nextInt();
-                                sc.nextLine();
+                                int idActualizar = leerEntero();
 
                                 Venta ventaBuscada =  ventas.buscar(idActualizar);
 
-                                ventas.actualizar(ventaBuscada);
+                                if(ventaBuscada == null){   // BUSCAR DEVUELVE NULL SI EL ID NO EXISTE
+                                    System.out.println("No existe una venta con ese id");
+                                } else {
+                                    ventas.actualizar(ventaBuscada);
+                                }
 
                                 break;
-                            case 5:
+                            case 5: // VERIFICAR PAGOS DE HOY
 
                                 for(Pago pg : ventas.verificarPagosDeHoy()){
 
@@ -111,7 +122,7 @@ public class Empresa {
                                 }
 
                                 break;
-                            case 0:
+                            case 0: // SALIR
                                 System.out.println("Saliendo del menú de ventas...");
 
                                 break;
@@ -120,11 +131,58 @@ public class Empresa {
                         }
 
                     }while (opcionVentas != 0);
+//------------------------------------------------------------------------
+                    break;
+                case 2: // EMPLEADOS
+                    int opcionEmpleados;
+
+                    do{
+                        menuEmpleados();
+                        opcionEmpleados = leerEntero();
+
+                        switch(opcionEmpleados){
+                            case 1: // INGRESAR EMPLEADO
+                                Empleado nuevo = ingresarEmpleado();
+                                try {
+                                    empleados.registrarEmpleado(nuevo);
+                                    System.out.println("Empleado cargado correctamente");
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexión: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println("No se pudo guardar el empleado: " + e.getMessage());
+                                }
+                                break;
+                            case 2: // ELIMINAR EMPLEADO
+                                System.out.println("Ingrese el DNI del empleado a eliminar: ");
+                                String dniEliminar = sc.nextLine();
+                                try {
+                                    if (empleados.eliminarEmpleado(dniEliminar)) {
+                                        System.out.println("Empleado eliminado correctamente");
+                                    } else {
+                                        System.out.println("No existe un empleado con ese DNI");
+                                    }
+                                } catch (DBConexionException e) {
+                                    System.out.println("Error de conexión: " + e.getMessage());
+                                } catch (DBCreateTableException e) {
+                                    System.out.println("No se pudo eliminar el empleado: " + e.getMessage());
+                                }
+                                break;
+
+                            case 3:// LISTAR EMPLEADOS
+                                System.out.println(empleados.listar());   // listar() devuelve el texto, Empresa lo imprime
+                                break;
+                            case 4://BUSCAR EMPLEADO
+                                break;
+                            case 0:
+                                System.out.println("Saliendo del menú de empleados...");
+                                break;
+                            default:
+                                System.out.println("Opción inválida");
+                        }
+                    }while (opcionEmpleados != 0);
 
                     break;
-                case 2:
 
-                    break;
                 case 0:
 
                     break;
@@ -133,15 +191,20 @@ public class Empresa {
             }
         }while (opcionPrincipal != 0);
     }
-
+//-------------------------- BDD------------------------------
     private void cargarBaseDeDatos() {
         try {
             ConexionClientes.crearTablaCliente();   // primero creo bdd clientes
             ConexionVentas.crearTablaVentas();      // después bdd ventas, porque depende de clientes
+            ConexionEmpleados.crearTabla();         // tabla de empleados
 
             // trae de MySQL los clientes guardados y los carga en la gestora
             for (Cliente c : ConexionClientes.obtenerClientes().values()) {
                 clientes.agregar(c.getDni(), c);
+            }
+            // trae de MySQL los empleados (vendedores y administrativos) y los carga en la gestora
+            for (Empleado e : ConexionEmpleados.listarEmpleados().values()) {
+                empleados.agregar(e.getDni(), e);
             }
         } catch (DBConexionException e) {
             System.out.println("Error de conexión: " + e.getMessage());
@@ -149,7 +212,7 @@ public class Empresa {
             System.out.println("Error al leer los datos: " + e.getMessage());
         }
     }
-
+//---------------------------------MENU---------------------
     private void menuPrincipal(){
         System.out.println("==========MENU PRINCIPAL==========");
         System.out.println("1.=====VENTAS=====");
@@ -157,6 +220,15 @@ public class Empresa {
         System.out.println("3.=====CLIENTES=====");
         System.out.println("0. Salir");
 
+    }
+
+    private void menuEmpleados(){
+        System.out.println("==========MENU EMPLEADOS==========");
+        System.out.println("1.=====Dar de alta un empleado=====");
+        System.out.println("2.=====Eliminar un empleado=====");
+        System.out.println("3.=====Mostrar empleados=====");
+        System.out.println("4.=====Buscar un empleado=====");
+        System.out.println("0. Salir");
     }
 
     private void menuVentas(){
@@ -168,14 +240,13 @@ public class Empresa {
         System.out.println("5.=====Mostrar los pagos de hoy=====");
         System.out.println("0. Salir");
     }
-
+//--------------------------------METODOS VENTAS----------------
     private Contado ingresarVentaContado(){
 
         LocalDate fechaDeHoy = LocalDate.now();
 
         System.out.println("Ingrese el monto de la seña: ");
-        double montoSenia = sc.nextDouble();
-        sc.nextLine();
+        double montoSenia = leerDouble();
 
         Cliente cliente = ingresarCliente();
 
@@ -218,8 +289,7 @@ public class Empresa {
         ModeloCasa modelo = elegirModeloCasa();
 
         System.out.println("Ingrese los metros cuadrados de la casa: ");
-        double m2Casa = sc.nextDouble();
-        sc.nextLine();
+        double m2Casa = leerDouble();
 
         IncluyePlatea platea = elegirIncluyePlatea();
 
@@ -227,10 +297,10 @@ public class Empresa {
 
     }
 
-    private Vendedor elegirVendedor(){
+    // Devuelve los vendedores activos (sirve para mostrarlos y para saber si hay alguno)
+    private List<Vendedor> listarVendedores(){
 
         List<Vendedor> listaVendedores = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
 
         for(Empleado emp : empleados.listarEmpleadosActivos()){
 
@@ -241,17 +311,32 @@ public class Empresa {
             }
         }
 
+        return listaVendedores;
+    }
+
+    private Vendedor elegirVendedor(){
+
+        List<Vendedor> listaVendedores = listarVendedores();
+        StringBuilder sb = new StringBuilder();
+
         for(int i = 0; i < listaVendedores.size(); i++){
 
-            sb.append(i + 1).append(". ").append(listaVendedores.get(i).getNombre()).append("\n");
+            sb.append(i + 1).append(". ").append(listaVendedores.get(i).getNombreCompleto()).append("\n");
 
         }
 
         System.out.println(sb);
 
-        System.out.println("Ingrese el indice del vendedor que elige: ");
-        int indiceVendedorElegido = sc.nextInt();
-        sc.nextLine();
+        int indiceVendedorElegido;
+
+        do {   // SE REPITE HASTA QUE ELIJA UN NUMERO QUE ESTE EN LA LISTA
+            System.out.println("Ingrese el indice del vendedor que elige: ");
+            indiceVendedorElegido = leerEntero();
+
+            if(indiceVendedorElegido < 1 || indiceVendedorElegido > listaVendedores.size()){
+                System.out.println("Opción inválida, intente de nuevo");
+            }
+        } while (indiceVendedorElegido < 1 || indiceVendedorElegido > listaVendedores.size());
 
         return listaVendedores.get(indiceVendedorElegido - 1);
     }
@@ -261,8 +346,7 @@ public class Empresa {
         LocalDate fechaDeHoy = LocalDate.now();
 
         System.out.println("Ingrese el monto de la seña: ");
-        double montoSenia = sc.nextDouble();
-        sc.nextLine();
+        double montoSenia = leerDouble();
 
         Cliente cliente = ingresarCliente();
 
@@ -271,8 +355,7 @@ public class Empresa {
         Cotizacion cotizacion = ingresarCotizacion();
 
         System.out.println("Ingrese el anticipo: ");
-        double anticipo =  sc.nextDouble();
-        sc.nextLine();
+        double anticipo =  leerDouble();
 
         PlanFinanciacion planElegido = elegirPlanFinanciacion();
 
@@ -295,25 +378,49 @@ public class Empresa {
 
     }
 
-    private Administrativo elegirAdministrativo(){
+    // Devuelve los administrativos activos (sirve para mostrarlos y para saber si hay alguno)
+    private List<Administrativo> listarAdministrativos(){
 
-        Administrativo administrativoElegido = null;
-
-        System.out.println("Ingrese el nombre del administrativo: ");
-        String nombreAdministrativo = sc.nextLine();
+        List<Administrativo> listaAdministrativos = new ArrayList<>();
 
         for(Empleado emp : empleados.listarEmpleadosActivos()){
 
-            if(emp.getNombre().equals(nombreAdministrativo)){
+            if(emp instanceof Administrativo){
 
-                administrativoElegido = (Administrativo) emp;
+                listaAdministrativos.add((Administrativo) emp);
 
-                break;
             }
+        }
+
+        return listaAdministrativos;
+    }
+
+    // IGUAL QUE ELEGIR VENDEDOR: SE MUESTRA LA LISTA NUMERADA Y SE ELIGE POR NUMERO
+    private Administrativo elegirAdministrativo(){
+
+        List<Administrativo> listaAdministrativos = listarAdministrativos();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < listaAdministrativos.size(); i++){
+
+            sb.append(i + 1).append(". ").append(listaAdministrativos.get(i).getNombreCompleto()).append("\n");
 
         }
 
-        return administrativoElegido;
+        System.out.println(sb);
+
+        int indiceElegido;
+
+        do {   // SE REPITE HASTA QUE ELIJA UN NUMERO QUE ESTE EN LA LISTA
+            System.out.println("Ingrese el indice del administrativo que aprueba el credito: ");
+            indiceElegido = leerEntero();
+
+            if(indiceElegido < 1 || indiceElegido > listaAdministrativos.size()){
+                System.out.println("Opción inválida, intente de nuevo");
+            }
+        } while (indiceElegido < 1 || indiceElegido > listaAdministrativos.size());
+
+        return listaAdministrativos.get(indiceElegido - 1);
     }
 
     private PlanContado elegirPlanContado() {  // RESUELVE PROBLEMA CON ENUM, EVITANDO POSIBLES DIFERENCIAS DE TIPEO
@@ -324,8 +431,7 @@ public class Empresa {
             System.out.println("1. Pago total");
             System.out.println("2. Plan 6 cuotas");
             System.out.println("3. Plan 12 cuotas");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            int opcion = leerEntero();
 
             switch (opcion) {
                 case 1:
@@ -353,8 +459,7 @@ public class Empresa {
             System.out.println("1. Redes");
             System.out.println("2. Telefono");
             System.out.println("3. Presencial");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            int opcion = leerEntero();
 
             switch (opcion) {
                 case 1:
@@ -382,8 +487,7 @@ public class Empresa {
             System.out.println("1. Basico");
             System.out.println("2. Estandar");
             System.out.println("3. Premium");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            int opcion = leerEntero();
 
             switch (opcion) {
                 case 1:
@@ -452,8 +556,7 @@ public class Empresa {
             System.out.println("4. 48 cuotas (4 años)");
             System.out.println("5. 60 cuotas (5 años)");
             System.out.println("6. 72 cuotas (6 años)");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            int opcion = leerEntero();
 
             switch (opcion) {
                 case 1:
@@ -506,40 +609,62 @@ public class Empresa {
         }
     }
 
+    //---------------------METODOS EMPLEADOS ---------------------
+
+    // Pide los datos de un empleado nuevo. Se carga activo y con la fecha de hoy
+    private Empleado ingresarEmpleado(){
+        System.out.println("Ingrese el nombre: ");
+        String nombre = sc.nextLine();
+        System.out.println("Ingrese el apellido: ");
+        String apellido = sc.nextLine();
+        System.out.println("Ingrese el DNI: ");
+        String dni = sc.nextLine();
+        System.out.println("Ingrese el domicilio: ");
+        String domicilio = sc.nextLine();
+        System.out.println("Ingrese el correo: ");
+        String correo = sc.nextLine();
+        System.out.println("Ingrese el número de legajo: ");
+        int legajo = leerEntero();
+
+        Empleado nuevo = null;
+        do {
+            System.out.println("Es vendedor o administrativo? (V/A)");
+            String tipo = sc.nextLine().trim();
+
+            if (tipo.equalsIgnoreCase("V")) {
+                nuevo = new Vendedor(nombre, apellido, dni, domicilio, correo, legajo, EstadoEmpleados.ACTIVO, LocalDate.now());
+            } else if (tipo.equalsIgnoreCase("A")) {
+                nuevo = new Administrativo(nombre, apellido, dni, domicilio, correo, legajo, EstadoEmpleados.ACTIVO, LocalDate.now());
+            } else {
+                System.out.println("Respuesta inválida, escriba V o A");
+            }
+        } while (nuevo == null);
+
+        return nuevo;
+    }
+
+    //---------------------LECTURA SEGURA DE NUMEROS ---------------------
+
+    // Lee un número entero. Si el usuario escribe letras, avisa y vuelve a preguntar (evita que el programa se corte)
+    private int leerEntero() {
+        while (!sc.hasNextInt()) {          // mientras lo escrito NO sea un entero...
+            System.out.println("Debe ingresar un número");
+            sc.nextLine();                  // ...descarta lo que escribió
+        }
+        int numero = sc.nextInt();
+        sc.nextLine();                      // limpia el Enter
+        return numero;
+    }
+
+    // Lo mismo para números con decimales (montos, metros cuadrados)
+    private double leerDouble() {
+        while (!sc.hasNextDouble()) {
+            System.out.println("Debe ingresar un número");
+            sc.nextLine();
+        }
+        double numero = sc.nextDouble();
+        sc.nextLine();
+        return numero;
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

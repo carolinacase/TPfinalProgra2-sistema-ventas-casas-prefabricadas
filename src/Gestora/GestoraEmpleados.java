@@ -1,6 +1,9 @@
 package Gestora;
 
+import DAO.ConexionEmpleados;
 import Enumeradores.EstadoEmpleados;
+import Excepciones.DBConexionException;
+import Excepciones.DBCreateTableException;
 import Modelo.Empleado;
 
 import java.util.ArrayList;
@@ -64,4 +67,21 @@ public class GestoraEmpleados extends GestoraGenerica<Empleado, String>{
 
         }while (opcion != 0);
     }
+
+    // Guarda el empleado en MySQL y lo agrega a la gestora
+    public void registrarEmpleado(Empleado e) throws DBConexionException, DBCreateTableException {
+        ConexionEmpleados.insertarEmpleado(e);   // si el dni ya existe, MySQL lo rechaza y salta la excepción
+        agregar(e.getDni(), e);
+    }
+
+    // Si el empleado existe, lo borra de MySQL y de la gestora. Devuelve false si no existe
+    public boolean eliminarEmpleado(String dni) throws DBConexionException, DBCreateTableException {
+        if (buscar(dni) == null) {
+            return false;
+        }
+        ConexionEmpleados.eliminarEmpleado(dni);   // primero en la base...
+        eliminar(dni);                             // ...después en el HashMap
+        return true;
+    }
+
 }
