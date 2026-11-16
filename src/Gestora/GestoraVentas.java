@@ -140,6 +140,18 @@ public class GestoraVentas extends GestoraGenerica<Venta, Integer>{
         agregar(id, v);                             // LA CLAVE DEL HashMap ES EL ID
     }
 
+    // REGISTRA UN PAGO: PRIMERO EN MySQL Y DESPUES EN LA VENTA (SI FALLA LA BASE, LA VENTA NO CAMBIA)
+    public void registrarPago(Venta v, double monto) throws DBConexionException, DBCreateTableException {
+        ConexionVentas.actualizarMontoPagado(v.getIdVenta(), v.getMontoPagado() + monto);
+        v.registrarPago(LocalDate.now(), monto);   // SUMA AL HISTORIAL DE PAGOS Y AL MONTO PAGADO
+    }
+
+    // CAMBIA EL ESTADO DE UNA VENTA: PRIMERO EN MySQL Y DESPUES EN LA VENTA
+    public void cambiarEstado(Venta v, EstadoVenta nuevoEstado) throws DBConexionException, DBCreateTableException {
+        ConexionVentas.actualizarEstado(v.getIdVenta(), nuevoEstado.name());   // EL ENUM SE GUARDA COMO TEXTO
+        v.setEstado(nuevoEstado);
+    }
+
     // EVITANDO ERRORES LEE UN NUMERO ENTERO SIN QUE EL PROGRAMA SE CORTE SI EL USUARIO ESCRIBE LETRAS
     private int leerEntero(Scanner sc) {
         while (!sc.hasNextInt()) {
