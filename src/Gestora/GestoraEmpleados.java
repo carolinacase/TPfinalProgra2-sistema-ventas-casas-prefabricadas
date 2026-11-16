@@ -68,19 +68,20 @@ public class GestoraEmpleados extends GestoraGenerica<Empleado, String>{
         }while (opcion != 0);
     }
 
-    // Guarda el empleado en MySQL y lo agrega a la gestora
+    // GUARDA EL EMPLEADO EN MySQL, LE ASIGNA EL LEGAJO QUE GENERO LA BASE Y LO AGREGA A LA GESTORA
     public void registrarEmpleado(Empleado e) throws DBConexionException, DBCreateTableException {
-        ConexionEmpleados.insertarEmpleado(e);   // si el dni ya existe, MySQL lo rechaza y salta la excepción
+        int legajo = ConexionEmpleados.insertarEmpleado(e);   // SI EL DNI YA EXISTE, MySQL LO RECHAZA Y SALTA LA EXCEPCION
+        e.setId(legajo);                                      // EL EMPLEADO SE QUEDA CON EL LEGAJO DE LA BASE
         agregar(e.getDni(), e);
     }
 
-    // Si el empleado existe, lo borra de MySQL y de la gestora. Devuelve false si no existe
+    // SI EL EMPLEADO EXISTE, LO BORRA DE MySQL Y DE LA GESTORA. DEVUELVE FALSE SI NO EXISTE
     public boolean eliminarEmpleado(String dni) throws DBConexionException, DBCreateTableException {
         if (buscar(dni) == null) {
             return false;
         }
-        ConexionEmpleados.eliminarEmpleado(dni);   // primero en la base...
-        eliminar(dni);                             // ...después en el HashMap
+        ConexionEmpleados.eliminarEmpleado(dni);   // PRIMERO EN LA BASE...
+        eliminar(dni);                             // ...DESPUES EN EL HashMap
         return true;
     }
 

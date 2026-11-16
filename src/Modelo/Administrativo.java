@@ -16,7 +16,7 @@ public class Administrativo extends Empleado{
 
         if (!f.getCredito().verificarCredito()) {
 
-            throw new DocumentacionIncompletaException("Falta documentación para el credito");
+            throw new DocumentacionIncompletaException("Falta documentacion para el credito");
 
         }
 
@@ -27,7 +27,7 @@ public class Administrativo extends Empleado{
 
     @Override
     public String toString() {
-        return "Administrativo" + super.toString();
+        return "Administrativo | " + super.toString();
     }
 
     @Override

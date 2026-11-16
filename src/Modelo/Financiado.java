@@ -5,6 +5,7 @@ import Enumeradores.PlanFinanciacion;
 import Excepciones.AnticipoInsuficienteException;
 
 import java.time.LocalDate;
+import java.util.Locale;
 
 public class Financiado extends Venta{
     private static final double PRIMER_ANTICIPO = 0.30;
@@ -39,14 +40,19 @@ public class Financiado extends Venta{
 
     }
 
+    // ANTICIPO MINIMO PARA UN PRECIO DADO (30%). ES static PORQUE Empresa LO NECESITA ANTES DE CREAR LA VENTA
+    public static double calcularAnticipoMinimo(double precioTotal) {
+        return precioTotal * PRIMER_ANTICIPO;
+    }
+
     // Hacemos lo mismo para validar el anticipo
     // Por otro lado, si el anticipo es menor al minimo, lanzamos un mensaje con AnticipoInsuficienteException
     public void validarAnticipo() throws AnticipoInsuficienteException {
 
-        double minimo = getCotizacion().calcularPrecio() * PRIMER_ANTICIPO;
+        double minimo = calcularAnticipoMinimo(getCotizacion().calcularPrecio());
 
         if (anticipo < minimo) {
-            throw new AnticipoInsuficienteException("El anticipo debe ser de al menos $" + minimo);
+            throw new AnticipoInsuficienteException("El anticipo debe ser de al menos $" + String.format(Locale.of("es", "AR"), "%,.2f", minimo));   // MONTO COMPLETO, SIN NOTACION E
         }
 
     }

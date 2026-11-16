@@ -45,6 +45,6 @@ public enum PlanFinanciacion {
         }
 
         return null;
-        //throw new IllegalArgumentException("Cantidad de cuotas no válida: " + cantidadCuotas);
+        //throw new IllegalArgumentException("Cantidad de cuotas no valida: " + cantidadCuotas);
     }
 }

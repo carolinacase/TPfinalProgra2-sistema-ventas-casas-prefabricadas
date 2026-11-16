@@ -85,6 +85,11 @@ public class Vendedor extends Empleado{
     }
 
     @Override
+    public String toString() {   // ASI EN LOS LISTADOS SE VE QUE ES VENDEDOR
+        return "Vendedor | " + super.toString();
+    }
+
+    @Override
     public String getIdUnico() {
 
         return this.getDni();
